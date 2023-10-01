@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SchoolSocialMediaServer.DbContexts;
+using SchoolSocialMediaServer.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,8 @@ builder.Services.AddDbContext<SchoolSocialMediaDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("SchoolSocialMediaDb")));
 
 builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 

@@ -9,15 +9,34 @@ namespace SchoolSocialMediaServer.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
+        [MaxLength(32)]
         public string City { get; set; } = null!;
 
+        [MaxLength(128)]
         public string Address { get; set; } = null!;
 
+        public string FullAddress
+        {
+            get
+            {
+                return $"{City}, {Address}";
+            }
+        }
+
+        [MaxLength(32)]
         public string Name { get; set; } = null!;
+
+        public string NameWithAddress
+        {
+            get
+            {
+                return $"{Name} ({FullAddress})";
+            }
+        }
 
         public string? ImageFileName { get; set; }
 
-        public static string ImageFilesDirectory { get; } = "Images/SchoolImages/";
+        public static string ImageFilesDirectory { get; } = "wwwroot/Images/SchoolImages/";
         
         public string? ImagePath
         {
@@ -28,7 +47,7 @@ namespace SchoolSocialMediaServer.Entities
                     return null;
                 }
 
-                return ImageFilesDirectory + ImageFileName;
+                return Path.Combine(ImageFilesDirectory, ImageFileName);
             }
         }
 
@@ -37,12 +56,5 @@ namespace SchoolSocialMediaServer.Entities
         public ICollection<User> Users { get; set; } = new List<User>();
 
         public School() { }
-
-        public School(string city, string address, string imageFileName)
-        {
-            City = city;
-            Address = address;
-            ImageFileName = imageFileName;
-        }
     }
 }

@@ -9,6 +9,8 @@ namespace SchoolSocialMediaServer.MappingProfiles
         public SchoolProfile()
         {
             CreateMap<School, SchoolDto>();
+            CreateMap<SchoolForCreateDto, School>();
+            CreateMap<SchoolForChangeDto, School>();
         }
     }
 }

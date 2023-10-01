@@ -1,0 +1,207 @@
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.FileProviders;
+using SchoolSocialMediaServer.Entities;
+using SchoolSocialMediaServer.Models;
+using SchoolSocialMediaServer.Repositories;
+using System.Net.WebSockets;
+
+namespace SchoolSocialMediaServer.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class SchoolsController : ControllerBase
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+
+        public SchoolsController(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork
+                ?? throw new ArgumentNullException(nameof(unitOfWork));
+
+            _mapper = mapper
+                ?? throw new ArgumentNullException(nameof(mapper));
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<ICollection<SchoolDto>>> ListSchools(
+            [FromQuery] int pageNum = 1, [FromQuery] int pageSize = 5)
+        {
+            var schoolEntities = await _unitOfWork.SchoolRepository
+                .GetSchoolAsync(pageNum, pageSize);
+
+            var schoolDtos = new List<SchoolDto>();
+
+            foreach (var schoolEntity in schoolEntities)
+            {
+                var schoolDto = _mapper.Map<SchoolDto>(schoolEntity);
+                schoolDtos.Add(schoolDto);
+            }
+
+            return schoolDtos;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<SchoolDto>> GetSchool(Guid id)
+        {
+            var schoolEntity = await _unitOfWork.SchoolRepository
+                .GetSchoolAsync(id);
+
+            if (schoolEntity == null)
+            {
+                return NotFound();
+            }
+
+            var schoolDto = _mapper.Map<SchoolDto>(schoolEntity);
+
+            return schoolDto;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<SchoolDto>> CreateSchool(
+            SchoolForCreateDto schoolForCreateDto)
+        {
+            var schoolEntity = _mapper.Map<School>(schoolForCreateDto);
+
+            _unitOfWork.SchoolRepository.Add(schoolEntity);
+
+            if (!await _unitOfWork.SaveChangesAsync())
+            {
+                throw new Exception("Error on school saving");
+            }
+
+            var schoolDto = _mapper.Map<SchoolDto>(schoolEntity);
+
+            return CreatedAtAction(nameof(GetSchool), new
+            {
+                schoolEntity.Id,
+            },
+            schoolDto);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> ChangeSchool(
+            SchoolForChangeDto schoolForChangeDto)
+        {
+            var schoolEntity = await _unitOfWork.SchoolRepository
+                .GetSchoolAsync(schoolForChangeDto.Id);
+
+            if (schoolEntity == null)
+            {
+                return NotFound(nameof(schoolEntity.Id));
+            }
+
+            _mapper.Map(schoolForChangeDto, schoolEntity);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteSchool(Guid id)
+        {
+            var schoolEntity = await _unitOfWork.SchoolRepository
+                .GetSchoolAsync(id);
+
+            if (schoolEntity == null)
+            {
+                return NotFound();
+            }
+
+            _unitOfWork.SchoolRepository.Delete(schoolEntity);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpPost("{id}/add_image")]
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<string>> AddSchoolImage(
+            Guid id, [FromForm]  AddImageDto addImageDto)
+        {
+            var schoolEntity = await _unitOfWork.SchoolRepository
+                .GetSchoolAsync(id);
+
+            if (schoolEntity == null)
+            {
+                return NotFound();
+            }
+
+            var image = addImageDto.Image;
+
+            var fileExtension = Path.GetExtension(image.FileName);
+
+            var fileName = Guid.NewGuid().ToString() + fileExtension;
+
+            var projectDirectory = Directory.GetCurrentDirectory();
+
+            if (projectDirectory == null)
+            {
+                throw new Exception("Saving error");
+            }
+
+            var schoolImagesPath = Path.Combine(
+                projectDirectory, School.ImageFilesDirectory);
+
+            var filePath = new PhysicalFileProvider(schoolImagesPath).Root + fileName;
+
+            var fileStream = System.IO.File.Create(filePath);
+
+            await image.CopyToAsync(fileStream);
+
+            fileStream.Flush();
+
+            fileStream.Close();
+
+            schoolEntity.ImageFileName = fileName;
+
+            await _unitOfWork.SaveChangesAsync();
+
+            if (schoolEntity.ImagePath == null)
+            {
+                return BadRequest();
+            }
+
+            return schoolEntity.ImagePath;
+        }
+
+        [HttpDelete("{schoolId}/remove_image")]
+        public async Task<ActionResult> RemoveImage(Guid schoolId)
+        {
+            var schoolEntity = await _unitOfWork.SchoolRepository
+                .GetSchoolAsync(schoolId);
+
+            if (schoolEntity == null)
+            {
+                return NotFound();
+            }
+
+            if (schoolEntity.ImagePath == null)
+            {
+                return BadRequest(nameof(schoolEntity.ImagePath));
+            }
+            
+            var projectDirectory = Directory.GetCurrentDirectory();
+
+            if (projectDirectory == null)
+            {
+                throw new Exception();
+            }
+
+            var imagePath = Path.Combine(
+                projectDirectory, schoolEntity.ImagePath);
+
+            System.IO.File.Delete(imagePath);
+
+            schoolEntity.ImageFileName = null;
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return NoContent();
+        }
+    }
+}
