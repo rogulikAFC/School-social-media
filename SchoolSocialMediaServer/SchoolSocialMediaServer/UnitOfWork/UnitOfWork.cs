@@ -1,4 +1,5 @@
 ﻿using SchoolSocialMediaServer.DbContexts;
+using SchoolSocialMediaServer.UnitOfWork;
 
 namespace SchoolSocialMediaServer.Repositories
 {
@@ -12,9 +13,11 @@ namespace SchoolSocialMediaServer.Repositories
                 ?? throw new ArgumentNullException(nameof(socialMediaDbContext));
 
             SchoolRepository = new SchoolRepository(_socialMediaDbContext);
+            CategoryRepository = new CategoryRepository(_socialMediaDbContext);
         }
 
         public ISchoolRepository SchoolRepository { get; }
+        public ICategoryRepository CategoryRepository { get; }
 
         public async Task<bool> SaveChangesAsync()
         {
