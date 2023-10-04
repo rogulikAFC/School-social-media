@@ -9,8 +9,14 @@ namespace SchoolSocialMediaServer.MappingProfiles
         public ArticleProfile()
         {
             CreateMap<Article, ArticleDto>()
-                .BeforeMap((s, d) =>
-                    d.Created = s.Created.ToString("dd.MM.yyyy HH:mm"));
+                .AfterMap((s, d) =>
+                    d.CreatedUTC = s.Created.ToString("dd.MM.yyyy HH:mm"));
+
+            CreateMap<Article, ArticleForPreviewDto>()
+                .AfterMap((s, d) =>
+                    d.CreatedUTC = s.Created.ToString("dd.MM.yyyy HH:mm"));
+
+            CreateMap<ArticleForCreateDto, Article>();
         }
     }
 }

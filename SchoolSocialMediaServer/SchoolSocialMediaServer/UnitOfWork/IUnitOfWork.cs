@@ -6,6 +6,7 @@ namespace SchoolSocialMediaServer.Repositories
     {
         ISchoolRepository SchoolRepository { get; }
         ICategoryRepository CategoryRepository { get; }
+        IArticleRepository ArticleRepository { get; }
         Task<bool> SaveChangesAsync();
     }
 }

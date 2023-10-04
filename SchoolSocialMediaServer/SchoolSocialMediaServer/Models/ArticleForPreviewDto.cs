@@ -1,10 +1,13 @@
-﻿namespace SchoolSocialMediaServer.Models
+﻿using SchoolSocialMediaServer.DbContexts;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.OpenApi;
+using Microsoft.AspNetCore.Http.HttpResults;
+namespace SchoolSocialMediaServer.Models
 {
-    public class ArticleDto
+    public class ArticleForPreviewDto
     {
         public Guid Id { get; set; }
         public string Title { get; set; } = null!;
-        public string Content { get; set; } = null!;
         public CategoryWithoutArticlesDto? Category { get; set; }
         public int ViewsCount { get; set; }
         public UserDto User { get; set; } = null!;

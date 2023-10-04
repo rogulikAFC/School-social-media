@@ -1,6 +1,7 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SchoolSocialMediaServer.DbContexts;
 using SchoolSocialMediaServer.Repositories;
+using SchoolSocialMediaServer.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 

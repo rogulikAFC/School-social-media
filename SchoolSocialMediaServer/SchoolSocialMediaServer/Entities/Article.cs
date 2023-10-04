@@ -56,18 +56,6 @@ namespace SchoolSocialMediaServer.Entities
             }
         }
 
-        public DateTime Created { get; set; }
-
-        public Article() { }
-
-        public Article(
-            string title, string content, Guid schoolId, Guid userId, Guid? categoryId)
-        {
-            Title = title;
-            Content = content;
-            CategoryId = categoryId;
-            UserId = userId;
-            SchoolId = schoolId;
-        }
+        public DateTimeOffset Created { get; set; } = DateTimeOffset.UtcNow;
     }
 }
