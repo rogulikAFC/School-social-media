@@ -20,6 +20,18 @@ namespace SchoolSocialMediaServer.UnitOfWork
             _socialMediaDbContext.Users.Add(user);
         }
 
+        public void AddAdminStatus(User user, School school)
+        {
+            var adminStatus = new AdminStatus()
+            {
+                Id = Guid.NewGuid(),
+                SchoolId = school.Id,
+                UserId = user.Id,
+            };
+
+            _socialMediaDbContext.AdminStatuses.Add(adminStatus);
+        }
+
         public void Delete(User user)
         {
             _socialMediaDbContext.Users.Remove(user);
@@ -30,6 +42,17 @@ namespace SchoolSocialMediaServer.UnitOfWork
             return await _socialMediaDbContext.Users
                 .Include(u => u.School)
                 .FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+        public async Task<bool> IsAdminAsync(Guid userId, Guid schoolId)
+        {
+            return await _socialMediaDbContext.AdminStatuses
+                .Where(uas =>
+                    uas.SchoolId == schoolId
+                    &&
+                    uas.UserId == userId)
+                .FirstOrDefaultAsync()
+                != null;
         }
 
         public async Task<IEnumerable<User>> ListAsync(int pageNum, int pageSize)

@@ -39,7 +39,7 @@ namespace SchoolSocialMediaServer.UnitOfWork
 
         public async Task<IEnumerable<Article>> ListAsync(
             int pageNum, int pageSize,
-            Guid? schoolId, Guid? categoryId)
+            Guid? schoolId, Guid? categoryId, Guid? userId)
         {
             return await _socialMediaDbContext.Articles
                 .Include(a => a.User)
@@ -62,7 +62,9 @@ namespace SchoolSocialMediaServer.UnitOfWork
                 .Where(a =>
                     categoryId == null ? true : a.CategoryId == categoryId
                     &&
-                    schoolId == null ? true : a.SchoolId == schoolId)
+                    schoolId == null ? true : a.SchoolId == schoolId
+                    &&
+                    userId == null ? true: a.UserId == userId)
                 .Skip((pageNum - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();

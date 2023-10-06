@@ -6,7 +6,7 @@ namespace SchoolSocialMediaServer.UnitOfWork
     {
         Task<IEnumerable<Article>> ListAsync(
             int pageNum, int pageSize,
-            Guid? schoolId, Guid? categoryId);
+            Guid? schoolId, Guid? categoryId, Guid? userId);
         Task<Article?> GetByIdAsync(Guid id);
         void Add(Article article);
         void Delete(Article article);

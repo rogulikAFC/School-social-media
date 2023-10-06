@@ -35,15 +35,15 @@ namespace SchoolSocialMediaServer.Entities
             }
         }
 
-        public ICollection<Article> Articles { get; } = new List<Article>();
+        public virtual ICollection<Article> Articles { get; } = new List<Article>();
 
         public Guid SchoolId { get; set; }
 
         [ForeignKey("SchoolId")]
         public School School { get; set; } = null!;
 
-        // will be admin status entity
-        public bool IsAdmin { get; set; } = false;
+        public virtual ICollection<AdminStatus> AdminStatuses { get; }
+            = new List<AdminStatus>();
 
         public User() { }
 

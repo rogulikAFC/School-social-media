@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SchoolSocialMediaServer.DbContexts;
@@ -11,9 +12,11 @@ using SchoolSocialMediaServer.DbContexts;
 namespace SchoolSocialMediaServer.Migrations
 {
     [DbContext(typeof(SchoolSocialMediaDbContext))]
-    partial class SchoolSocialMediaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231006162224_AdminStatusAdded")]
+    partial class AdminStatusAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -149,6 +152,9 @@ namespace SchoolSocialMediaServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("AdminStatusId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
@@ -201,7 +207,7 @@ namespace SchoolSocialMediaServer.Migrations
             modelBuilder.Entity("SchoolSocialMediaServer.Entities.AdminStatus", b =>
                 {
                     b.HasOne("SchoolSocialMediaServer.Entities.User", "User")
-                        .WithMany("AdminStatuses")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -297,8 +303,6 @@ namespace SchoolSocialMediaServer.Migrations
 
             modelBuilder.Entity("SchoolSocialMediaServer.Entities.User", b =>
                 {
-                    b.Navigation("AdminStatuses");
-
                     b.Navigation("Articles");
                 });
 #pragma warning restore 612, 618

@@ -8,5 +8,7 @@ namespace SchoolSocialMediaServer.UnitOfWork
         Task<User?> GetByIdAsync(Guid id);
         void Add(User user);
         void Delete(User user);
+        void AddAdminStatus(User user, School school);
+        Task<bool> IsAdminAsync(Guid userId, Guid schoolId);
     }
 }

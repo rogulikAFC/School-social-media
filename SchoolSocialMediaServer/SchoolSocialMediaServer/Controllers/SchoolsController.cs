@@ -78,12 +78,9 @@ namespace SchoolSocialMediaServer.Controllers
                 return NotFound(nameof(schoolForCreateDto.CreatorUserId));
             }
 
-            creatorUser.IsAdmin = true;
+            _unitOfWork.UserRepository.AddAdminStatus(creatorUser, schoolEntity);
 
-            if (!await _unitOfWork.SaveChangesAsync())
-            {
-                throw new Exception("Error on school saving");
-            }
+            await _unitOfWork.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetSchool), new
             {
@@ -92,10 +89,15 @@ namespace SchoolSocialMediaServer.Controllers
             schoolDto);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}/by_admin/{userId}")]
         public async Task<ActionResult> ChangeSchool(
-            Guid id, SchoolForChangeDto schoolForChangeDto)
+            Guid id, Guid userId, SchoolForChangeDto schoolForChangeDto)
         {
+            if (!await _unitOfWork.UserRepository.IsAdminAsync(userId, id))
+            {
+                return Unauthorized();
+            }
+
             var schoolEntity = await _unitOfWork.SchoolRepository
                 .GetSchoolAsync(id);
 
@@ -111,9 +113,14 @@ namespace SchoolSocialMediaServer.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteSchool(Guid id)
+        [HttpDelete("{id}/by_admin/{userId}")]
+        public async Task<ActionResult> DeleteSchool(Guid id, Guid userId)
         {
+            if (!await _unitOfWork.UserRepository.IsAdminAsync(userId, id))
+            {
+                return Unauthorized();
+            }
+            
             var schoolEntity = await _unitOfWork.SchoolRepository
                 .GetSchoolAsync(id);
 
@@ -129,11 +136,16 @@ namespace SchoolSocialMediaServer.Controllers
             return NoContent();
         }
 
-        [HttpPost("{id}/add_image")]
+        [HttpPost("{id}/add_image/by_admin/{userId}")]
         [Consumes("multipart/form-data")]
         public async Task<ActionResult<string>> AddSchoolImage(
-            Guid id, [FromForm]  AddImageDto addImageDto)
+            Guid id, Guid userId, [FromForm]  AddImageDto addImageDto)
         {
+            if (!await _unitOfWork.UserRepository.IsAdminAsync(userId, id))
+            {
+                return Unauthorized();
+            }
+
             var schoolEntity = await _unitOfWork.SchoolRepository
                 .GetSchoolAsync(id);
 
@@ -180,11 +192,16 @@ namespace SchoolSocialMediaServer.Controllers
             return schoolEntity.ImagePath;
         }
 
-        [HttpDelete("{schoolId}/remove_image")]
-        public async Task<ActionResult> RemoveImage(Guid schoolId)
+        [HttpDelete("{id}/remove_image/by_admin/{userId}")]
+        public async Task<ActionResult> RemoveImage(Guid id, Guid userId)
         {
+            if (!await _unitOfWork.UserRepository.IsAdminAsync(userId, id))
+            {
+                return Unauthorized();
+            }
+
             var schoolEntity = await _unitOfWork.SchoolRepository
-                .GetSchoolAsync(schoolId);
+                .GetSchoolAsync(id);
 
             if (schoolEntity == null)
             {

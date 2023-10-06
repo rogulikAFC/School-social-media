@@ -5,9 +5,6 @@ namespace SchoolSocialMediaServer.Models
     public class SchoolForChangeDto
     {
         [Required]
-        public Guid Id { get; set; }
-
-        [Required]
         [MaxLength(32)]
         public string City { get; set; } = null!;
 
@@ -18,6 +15,5 @@ namespace SchoolSocialMediaServer.Models
         [Required]
         [MaxLength(32)]
         public string Name { get; set; } = null!;
-
     }
 }

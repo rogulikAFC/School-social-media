@@ -24,11 +24,11 @@ namespace SchoolSocialMediaServer.Controllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ArticleForPreviewDto>>> ListArticles(
-            [FromQuery] Guid? schoolId, [FromQuery] Guid? categoryId,
+            [FromQuery] Guid? schoolId, [FromQuery] Guid? categoryId, [FromQuery] Guid? userId,
             [FromQuery] int pageNum = 1, [FromQuery] int pageSize = 5)
         {
             var articles = await _unitOfWork.ArticleRepository
-                .ListAsync(pageNum, pageSize, schoolId, categoryId);
+                .ListAsync(pageNum, pageSize, schoolId, categoryId, userId);
 
             var articleDtos = new List<ArticleForPreviewDto>();
 
