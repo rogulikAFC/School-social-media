@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SchoolSocialMediaServer.DbContexts;
@@ -11,9 +12,11 @@ using SchoolSocialMediaServer.DbContexts;
 namespace SchoolSocialMediaServer.Migrations
 {
     [DbContext(typeof(SchoolSocialMediaDbContext))]
-    partial class SchoolSocialMediaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231006043624_UserEmailAdded")]
+    partial class UserEmailAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -136,9 +139,6 @@ namespace SchoolSocialMediaServer.Migrations
 
                     b.Property<string>("ImageFileName")
                         .HasColumnType("text");
-
-                    b.Property<bool>("IsAdmin")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()

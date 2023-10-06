@@ -15,5 +15,8 @@ namespace SchoolSocialMediaServer.Models
         [Required]
         [MaxLength(32)]
         public string Name { get; set; } = null!;
+
+        [Required]
+        public Guid CreatorUserId { get; set; }
     }
 }

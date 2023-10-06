@@ -13,6 +13,10 @@ namespace SchoolSocialMediaServer.Entities
         [MaxLength(32)]
         public string Name { get; set; } = null!;
 
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = string.Empty;
+
         public int ProfileViewCount { get; set; }
         
         public string? ImageFileName { get; set; }
@@ -37,6 +41,9 @@ namespace SchoolSocialMediaServer.Entities
 
         [ForeignKey("SchoolId")]
         public School School { get; set; } = null!;
+
+        // will be admin status entity
+        public bool IsAdmin { get; set; } = false;
 
         public User() { }
 

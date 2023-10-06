@@ -67,12 +67,23 @@ namespace SchoolSocialMediaServer.Controllers
 
             _unitOfWork.SchoolRepository.Add(schoolEntity);
 
+
+            var schoolDto = _mapper.Map<SchoolDto>(schoolEntity);
+
+            var creatorUser = await _unitOfWork.UserRepository
+                .GetByIdAsync(schoolForCreateDto.CreatorUserId);
+
+            if (creatorUser == null)
+            {
+                return NotFound(nameof(schoolForCreateDto.CreatorUserId));
+            }
+
+            creatorUser.IsAdmin = true;
+
             if (!await _unitOfWork.SaveChangesAsync())
             {
                 throw new Exception("Error on school saving");
             }
-
-            var schoolDto = _mapper.Map<SchoolDto>(schoolEntity);
 
             return CreatedAtAction(nameof(GetSchool), new
             {
@@ -81,12 +92,12 @@ namespace SchoolSocialMediaServer.Controllers
             schoolDto);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<ActionResult> ChangeSchool(
-            SchoolForChangeDto schoolForChangeDto)
+            Guid id, SchoolForChangeDto schoolForChangeDto)
         {
             var schoolEntity = await _unitOfWork.SchoolRepository
-                .GetSchoolAsync(schoolForChangeDto.Id);
+                .GetSchoolAsync(id);
 
             if (schoolEntity == null)
             {
