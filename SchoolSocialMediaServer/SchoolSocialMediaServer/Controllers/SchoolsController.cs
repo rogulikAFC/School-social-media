@@ -139,7 +139,7 @@ namespace SchoolSocialMediaServer.Controllers
         [HttpPost("{id}/add_image/by_admin/{userId}")]
         [Consumes("multipart/form-data")]
         public async Task<ActionResult<string>> AddSchoolImage(
-            Guid id, Guid userId, [FromForm]  AddImageDto addImageDto)
+            Guid id, Guid userId, [FromForm] AddImageDto addImageDto)
         {
             if (!await _unitOfWork.UserRepository.IsAdminAsync(userId, id))
             {

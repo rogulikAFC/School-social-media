@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.Extensions.FileProviders;
 using SchoolSocialMediaServer.Entities;
 using SchoolSocialMediaServer.Models;
 using SchoolSocialMediaServer.Repositories;
@@ -128,6 +129,92 @@ namespace SchoolSocialMediaServer.Controllers
             }
 
             _unitOfWork.UserRepository.Delete(user);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpPost("{id}/add_image")]
+        [Consumes("multipart/form-data")]
+        public async Task<ActionResult<string>> AddUserImage(
+            [FromForm] AddImageDto addImageDto, Guid id)
+        {
+            var user = await _unitOfWork.UserRepository
+                .GetByIdAsync(id);
+
+            if (user == null)
+            {
+                return NotFound(nameof(id));
+            }
+
+            var image = addImageDto.Image;
+
+            var fileExtension = Path.GetExtension(image.FileName);
+
+            var fileName = Guid.NewGuid().ToString() + fileExtension;
+
+            var projectDirectory = Directory.GetCurrentDirectory();
+
+            if (projectDirectory == null)
+            {
+                throw new Exception("Saving error");
+            }
+
+            var schoolImagesPath = Path.Combine(
+                projectDirectory, Entities.User.ImageFilesDirectory);
+
+            var filePath = new PhysicalFileProvider(schoolImagesPath).Root + fileName;
+
+            var fileStream = System.IO.File.Create(filePath);
+
+            await image.CopyToAsync(fileStream);
+
+            fileStream.Flush();
+
+            fileStream.Close();
+
+            user.ImageFileName = fileName;
+
+            await _unitOfWork.SaveChangesAsync();
+
+            if (user.ImagePath == null)
+            {
+                return BadRequest(nameof(user.ImagePath));
+            }
+
+            return user.ImagePath;
+        }
+
+        [HttpDelete("{id}/remove_image")]
+        public async Task<ActionResult> RemoveUserImage(Guid id)
+        {
+            var user = await _unitOfWork.UserRepository
+                .GetByIdAsync(id);
+
+            if (user == null)
+            {
+                return NotFound(nameof(id));
+            }
+
+            if (user.ImagePath == null)
+            {
+                return BadRequest(nameof(user.ImagePath));
+            }
+
+            var projectDirectory = Directory.GetCurrentDirectory();
+
+            if (projectDirectory == null)
+            {
+                throw new Exception();
+            }
+
+            var imagePath = Path.Combine(
+                projectDirectory, user.ImagePath);
+
+            System.IO.File.Delete(imagePath);
+
+            user.ImageFileName = null;
 
             await _unitOfWork.SaveChangesAsync();
 
