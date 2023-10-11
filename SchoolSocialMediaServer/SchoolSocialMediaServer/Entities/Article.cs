@@ -41,6 +41,8 @@ namespace SchoolSocialMediaServer.Entities
 
         public ICollection<Vote> Votes { get; } = new List<Vote>();
 
+        public ICollection<Report> Reports { get; } = new List<Report>();
+
         public int Rating
         {
             get

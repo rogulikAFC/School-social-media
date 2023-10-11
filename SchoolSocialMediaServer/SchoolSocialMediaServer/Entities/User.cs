@@ -45,6 +45,8 @@ namespace SchoolSocialMediaServer.Entities
         public virtual ICollection<AdminStatus> AdminStatuses { get; }
             = new List<AdminStatus>();
 
+        public virtual int Karma { get; set; } = 0;
+
         public User() { }
 
         public User(string name, Guid schoolId, string? imageFileName)

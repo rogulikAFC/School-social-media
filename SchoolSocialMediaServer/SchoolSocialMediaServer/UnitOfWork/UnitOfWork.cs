@@ -16,12 +16,14 @@ namespace SchoolSocialMediaServer.Repositories
             CategoryRepository = new CategoryRepository(_socialMediaDbContext);
             ArticleRepository = new ArticleRepository(_socialMediaDbContext);
             UserRepository = new UserRepository(_socialMediaDbContext);
+            ReportRepository = new ReportRepository(_socialMediaDbContext);
         }
 
         public ISchoolRepository SchoolRepository { get; }
         public ICategoryRepository CategoryRepository { get; }
         public IArticleRepository ArticleRepository { get; }
         public IUserRepository UserRepository { get; }
+        public IReportRepository ReportRepository { get; }
 
         public async Task<bool> SaveChangesAsync()
         {

@@ -30,7 +30,7 @@ namespace SchoolSocialMediaServer.Controllers
             [FromQuery] int pageNum = 1, [FromQuery] int pageSize = 5)
         {
             var schoolEntities = await _unitOfWork.SchoolRepository
-                .GetSchoolAsync(pageNum, pageSize);
+                .GetSchoolsAsync(pageNum, pageSize);
 
             var schoolDtos = new List<SchoolDto>();
 

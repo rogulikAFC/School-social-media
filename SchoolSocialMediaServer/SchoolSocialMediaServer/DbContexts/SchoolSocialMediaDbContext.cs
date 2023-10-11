@@ -15,6 +15,7 @@ namespace SchoolSocialMediaServer.DbContexts
         public DbSet<School> Schools { get; set; }
         public DbSet<Vote> Votes { get; set; }
         public DbSet<AdminStatus> AdminStatuses { get; set; }
+        public DbSet<Report> Reports { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

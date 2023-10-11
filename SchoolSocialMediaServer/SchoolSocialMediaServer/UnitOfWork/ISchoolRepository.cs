@@ -4,7 +4,7 @@ namespace SchoolSocialMediaServer.Repositories
 {
     public interface ISchoolRepository
     {
-        Task<IEnumerable<School>> GetSchoolAsync(
+        Task<IEnumerable<School>> GetSchoolsAsync(
             int pageNum, int pageSize);
 
         Task<School?> GetSchoolAsync(Guid id);
@@ -12,5 +12,7 @@ namespace SchoolSocialMediaServer.Repositories
         void Add(School school);
 
         void Delete(School school);
+
+        Task<School?> GetSchoolWithArticlesAsync(Guid id);
     }
 }

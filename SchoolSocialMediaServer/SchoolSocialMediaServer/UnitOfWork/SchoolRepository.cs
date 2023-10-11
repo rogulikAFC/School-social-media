@@ -14,7 +14,7 @@ namespace SchoolSocialMediaServer.Repositories
                 ?? throw new ArgumentNullException(nameof(socialMediaDbContext));
         }
 
-        public async Task<IEnumerable<School>> GetSchoolAsync(
+        public async Task<IEnumerable<School>> GetSchoolsAsync(
             int pageNum, int pageSize)
         {
             return await _socialMediaDbContext.Schools
@@ -37,6 +37,18 @@ namespace SchoolSocialMediaServer.Repositories
         public void Delete(School school)
         {
             _socialMediaDbContext.Schools.Remove(school);
+        }
+
+        public async Task<School?> GetSchoolWithArticlesAsync(Guid id)
+        {
+            return await _socialMediaDbContext.Schools
+                .Include(s => s.Articles)
+                .ThenInclude(a => a.Reports)
+                .Include(s => s.Articles)
+                .ThenInclude(a => a.User)
+                .Include(s => s.Articles)
+                .ThenInclude(a => a.Category)
+                .FirstOrDefaultAsync();
         }
     }
 }

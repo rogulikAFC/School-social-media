@@ -47,6 +47,7 @@ namespace SchoolSocialMediaServer.UnitOfWork
                 .Include(a => a.Category)
                 .Include(a => a.Views)
                 .Include(a => a.Votes)
+                .Include(a => a.Reports)
                 .Select(a => new Article
                 {
                     Id = a.Id,

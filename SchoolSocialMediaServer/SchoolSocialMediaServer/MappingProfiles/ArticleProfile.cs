@@ -16,6 +16,10 @@ namespace SchoolSocialMediaServer.MappingProfiles
                 .AfterMap((s, d) =>
                     d.CreatedUTC = s.Created.ToString("dd.MM.yyyy HH:mm"));
 
+            CreateMap<Article, ArticleWithReportsDto>()
+                .AfterMap((s, d) =>
+                    d.CreatedUTC = s.Created.ToString("dd.MM.yyyy HH:mm"));
+
             CreateMap<ArticleForCreateDto, Article>();
         }
     }
