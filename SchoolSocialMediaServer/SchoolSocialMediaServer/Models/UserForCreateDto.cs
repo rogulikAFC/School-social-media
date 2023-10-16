@@ -7,8 +7,7 @@ namespace SchoolSocialMediaServer.Models
         [Required]
         public string Name { get; set; } = null!;
 
-        [Required]
-        public Guid SchoolId { get; set; }
+        public Guid? SchoolId { get; set; }
 
         [Required]
         [EmailAddress]

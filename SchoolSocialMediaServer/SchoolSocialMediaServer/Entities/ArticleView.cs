@@ -10,17 +10,11 @@ namespace SchoolSocialMediaServer.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
-        public DateTime DateTime { get; set; }
+        public DateTimeOffset DateTime { get; set; } = DateTimeOffset.UtcNow;
 
         public Guid ArticleId { get; set; }
 
         [ForeignKey("ArticleId")]
         public Article Article { get; set; } = null!;
-
-        public ArticleView(DateTime dateTime, Guid articleId)
-        {
-            DateTime = dateTime;
-            ArticleId = articleId;
-        }
     }
 }

@@ -21,7 +21,7 @@ namespace SchoolSocialMediaServer.Entities
         
         public string? ImageFileName { get; set; }
 
-        public static string ImageFilesDirectory { get; } = "wwwroot/Images/UserImages/";
+        public static string ImageFilesDirectory { get; } = "Images/UserImages/";
 
         public string? ImagePath {
             get
@@ -37,15 +37,17 @@ namespace SchoolSocialMediaServer.Entities
 
         public virtual ICollection<Article> Articles { get; } = new List<Article>();
 
-        public Guid SchoolId { get; set; }
+        public Guid? SchoolId { get; set; }
 
         [ForeignKey("SchoolId")]
-        public School School { get; set; } = null!;
+        public School? School { get; set; }
 
         public virtual ICollection<AdminStatus> AdminStatuses { get; }
             = new List<AdminStatus>();
 
         public virtual int Karma { get; set; } = 0;
+
+        public virtual ICollection<Vote> Votes { get; } = new List<Vote>();
 
         public User() { }
 

@@ -27,7 +27,7 @@ namespace SchoolSocialMediaServer.UnitOfWork
 
         public async Task<Article?> GetByIdAsync(Guid id)
         {
-            return await _socialMediaDbContext.Articles
+            var article = await _socialMediaDbContext.Articles
                 .Include(a => a.User)
                 .Include(a => a.School)
                 .Include(a => a.Category)
@@ -35,6 +35,17 @@ namespace SchoolSocialMediaServer.UnitOfWork
                 .Include(a => a.Votes)
                 .Where(a => a.Id == id)
                 .FirstOrDefaultAsync();
+
+            if (article == null)
+            {
+                return null;
+            }
+
+            var view = new ArticleView();
+
+            article.Views.Add(view);
+
+            return article;
         }
 
         public async Task<IEnumerable<Article>> ListAsync(
@@ -58,7 +69,9 @@ namespace SchoolSocialMediaServer.UnitOfWork
                     School = a.School,
                     UserId = a.UserId,
                     User = a.User,
+                    Votes = a.Votes,
                     Views = a.Views,
+                    Reports = a.Reports
                 })
                 .Where(a =>
                     categoryId == null ? true : a.CategoryId == categoryId
@@ -69,6 +82,17 @@ namespace SchoolSocialMediaServer.UnitOfWork
                 .Skip((pageNum - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
+        }
+
+        public void Like(Article article, User user)
+        {
+            var vote = new Vote()
+            {
+                Value = 1
+            };
+
+            article.Votes.Add(vote);
+            user.Votes.Add(vote);
         }
     }
 }

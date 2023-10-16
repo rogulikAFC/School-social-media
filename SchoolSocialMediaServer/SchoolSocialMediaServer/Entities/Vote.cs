@@ -22,14 +22,5 @@ namespace SchoolSocialMediaServer.Entities
 
         [ForeignKey("ArticleId")]
         public Article Article { get; set; } = null!;
-
-        public Vote() { }
-
-        public Vote(int value, Guid articleId, Guid userId)
-        {
-            Value = value;
-            UserId = userId;
-            ArticleId = articleId;
-        }
     }
 }

@@ -231,5 +231,40 @@ namespace SchoolSocialMediaServer.Controllers
 
             return NoContent();
         }
+
+        [HttpPost("{schoolId}/user/{userId}/make_admin/by_user/{adminId}")]
+        public async Task<ActionResult> MakeUserAdmin(
+            Guid schoolId, Guid userId, Guid adminId)
+        {
+            var isUserAdmin = await _unitOfWork.UserRepository
+                .IsAdminAsync(schoolId, adminId);
+
+            if (!isUserAdmin)
+            {
+                return Unauthorized(nameof(adminId));
+            }
+
+            var school = await _unitOfWork.SchoolRepository
+                .GetSchoolAsync(schoolId);
+
+            if (school == null)
+            {
+                return NotFound(nameof(school));
+            }
+
+            var user = await _unitOfWork.UserRepository
+                .GetByIdAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound(nameof(userId));
+            }
+
+            _unitOfWork.UserRepository.AddAdminStatus(user, school);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }

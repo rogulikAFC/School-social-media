@@ -62,12 +62,15 @@ namespace SchoolSocialMediaServer.Controllers
         public async Task<ActionResult<UserDto>> CreateUser(
             UserForCreateDto userForCreateDto)
         {
-            var school = await _unitOfWork.SchoolRepository
-                .GetSchoolAsync(userForCreateDto.SchoolId);
-
-            if (school == null)
+            if (userForCreateDto.SchoolId.HasValue)
             {
-                return NotFound(userForCreateDto.SchoolId);
+                var school = await _unitOfWork.SchoolRepository
+                    .GetSchoolAsync(userForCreateDto.SchoolId);
+
+                if (school == null)
+                {
+                    return NotFound(nameof(userForCreateDto.SchoolId));
+                }
             }
 
             var user = _mapper.Map<User>(userForCreateDto);
@@ -93,12 +96,15 @@ namespace SchoolSocialMediaServer.Controllers
         public async Task<ActionResult> UpdateUser(
             Guid id, UserForCreateDto userForUpdateDto)
         {
-            var school = await _unitOfWork.SchoolRepository
-                .GetSchoolAsync(userForUpdateDto.SchoolId);
-
-            if (school == null)
+            if (userForUpdateDto.SchoolId.HasValue)
             {
-                return NotFound(userForUpdateDto.SchoolId);
+                var school = await _unitOfWork.SchoolRepository
+                    .GetSchoolAsync(userForUpdateDto.SchoolId);
+
+                if (school == null)
+                {
+                    return NotFound(userForUpdateDto.SchoolId);
+                }
             }
 
             var user = await _unitOfWork.UserRepository

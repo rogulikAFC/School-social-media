@@ -47,6 +47,8 @@ namespace SchoolSocialMediaServer.Controllers
             var article = await _unitOfWork.ArticleRepository
                 .GetByIdAsync(id);
 
+            await _unitOfWork.SaveChangesAsync();
+
             if (article == null)
             {
                 return NotFound();
@@ -115,6 +117,33 @@ namespace SchoolSocialMediaServer.Controllers
             }
 
             _unitOfWork.ArticleRepository.Delete(article);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpPost("{id}/like/by_user/{userId}")]
+        public async Task<ActionResult> LikeArticle(Guid id, Guid userId)
+        {
+            var article = await _unitOfWork.ArticleRepository
+                .GetByIdAsync(id);
+
+            if (article == null)
+            {
+                return NotFound(nameof(id));
+            }
+
+            var user = await _unitOfWork.UserRepository
+                .GetByIdAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound(nameof(userId));
+            }
+
+            _unitOfWork.ArticleRepository
+                .Like(article, user);
 
             await _unitOfWork.SaveChangesAsync();
 

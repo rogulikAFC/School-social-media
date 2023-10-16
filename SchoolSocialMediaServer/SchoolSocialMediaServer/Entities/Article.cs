@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SchoolSocialMediaServer.Migrations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolSocialMediaServer.Entities
@@ -39,22 +40,15 @@ namespace SchoolSocialMediaServer.Entities
         [ForeignKey("SchoolId")]
         public School School { get; set; } = null!;
 
-        public ICollection<Vote> Votes { get; } = new List<Vote>();
+        public ICollection<Vote> Votes { get; set; } = new List<Vote>();
 
-        public ICollection<Report> Reports { get; } = new List<Report>();
+        public ICollection<Report> Reports { get; set; } = new List<Report>();
 
         public int Rating
         {
             get
             {
-                var rating = 0;
-
-                foreach (var vote in Votes)
-                {
-                    rating += vote.Value;
-                }
-
-                return rating;
+                return Votes.Sum(v => v.Value);
             }
         }
 

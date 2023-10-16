@@ -7,7 +7,7 @@ namespace SchoolSocialMediaServer.Repositories
         Task<IEnumerable<School>> GetSchoolsAsync(
             int pageNum, int pageSize);
 
-        Task<School?> GetSchoolAsync(Guid id);
+        Task<School?> GetSchoolAsync(Guid? id);
 
         void Add(School school);
 

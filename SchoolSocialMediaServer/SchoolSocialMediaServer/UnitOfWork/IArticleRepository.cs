@@ -10,5 +10,6 @@ namespace SchoolSocialMediaServer.UnitOfWork
         Task<Article?> GetByIdAsync(Guid id);
         void Add(Article article);
         void Delete(Article article);
+        void Like(Article article, User user);
     }
 }
