@@ -21,7 +21,7 @@ namespace SchoolSocialMediaServer.Entities
         
         public string? ImageFileName { get; set; }
 
-        public static string ImageFilesDirectory { get; } = "Images/UserImages/";
+        public static string ImageFilesDirectory { get; } = "wwwroot/Images/UserImages/";
 
         public string? ImagePath {
             get
@@ -32,6 +32,19 @@ namespace SchoolSocialMediaServer.Entities
                 }
 
                 return ImageFilesDirectory + ImageFileName;
+            }
+        }
+
+        public string? ImagePathForClient
+        {
+            get
+            {
+                if (ImageFileName == null)
+                {
+                    return null;
+                }
+
+                return "Images/UserImages/" + ImageFileName;
             }
         }
 

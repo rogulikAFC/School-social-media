@@ -71,7 +71,8 @@ namespace SchoolSocialMediaServer.UnitOfWork
                     User = a.User,
                     Votes = a.Votes,
                     Views = a.Views,
-                    Reports = a.Reports
+                    Reports = a.Reports,
+                    PreviewImageFileName = a.PreviewImageFileName,
                 })
                 .Where(a =>
                     categoryId == null ? true : a.CategoryId == categoryId

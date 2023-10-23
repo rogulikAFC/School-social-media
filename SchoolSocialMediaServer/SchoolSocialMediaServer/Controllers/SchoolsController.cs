@@ -141,6 +141,8 @@ namespace SchoolSocialMediaServer.Controllers
         public async Task<ActionResult<string>> AddSchoolImage(
             Guid id, Guid userId, [FromForm] AddImageDto addImageDto)
         {
+            await RemoveImage(id, userId);
+
             if (!await _unitOfWork.UserRepository.IsAdminAsync(userId, id))
             {
                 return Unauthorized();

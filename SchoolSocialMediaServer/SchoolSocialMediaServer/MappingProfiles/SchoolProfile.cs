@@ -8,8 +8,11 @@ namespace SchoolSocialMediaServer.MappingProfiles
     {
         public SchoolProfile()
         {
-            CreateMap<School, SchoolDto>();
+            CreateMap<School, SchoolDto>()
+                .AfterMap((s, d) => d.ImagePath = s.ImagePathForClient);
+
             CreateMap<SchoolForCreateDto, School>();
+
             CreateMap<SchoolForChangeDto, School>();
         }
     }

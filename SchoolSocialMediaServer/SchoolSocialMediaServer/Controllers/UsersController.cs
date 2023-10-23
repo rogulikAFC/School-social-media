@@ -146,6 +146,8 @@ namespace SchoolSocialMediaServer.Controllers
         public async Task<ActionResult<string>> AddUserImage(
             [FromForm] AddImageDto addImageDto, Guid id)
         {
+            await RemoveUserImage(id);
+
             var user = await _unitOfWork.UserRepository
                 .GetByIdAsync(id);
 

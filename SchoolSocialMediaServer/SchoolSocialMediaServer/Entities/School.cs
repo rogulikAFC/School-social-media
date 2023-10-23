@@ -36,7 +36,7 @@ namespace SchoolSocialMediaServer.Entities
 
         public string? ImageFileName { get; set; }
 
-        public static string ImageFilesDirectory { get; } = "Images/SchoolImages/";
+        public static string ImageFilesDirectory { get; } = "wwwroot/Images/SchoolImages/";
         
         public string? ImagePath
         {
@@ -47,7 +47,19 @@ namespace SchoolSocialMediaServer.Entities
                     return null;
                 }
 
-                return Path.Combine(ImageFilesDirectory, ImageFileName);
+                return ImageFilesDirectory + ImageFileName;
+            }
+        }
+        public string? ImagePathForClient
+        {
+            get
+            {
+                if (ImageFileName == null)
+                {
+                    return null;
+                }
+
+                return "Images/SchoolImages/" + ImageFileName;
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using SchoolSocialMediaServer.Migrations;
+﻿using AutoMapper.Configuration.Annotations;
+using SchoolSocialMediaServer.Migrations;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -51,6 +52,38 @@ namespace SchoolSocialMediaServer.Entities
                 return Votes.Sum(v => v.Value);
             }
         }
+
+        public string? PreviewImageFileName { get; set; }
+
+        public static string ImageFilesDirectory { get; } = "wwwroot/Images/ArticlePreviewsImages/";
+
+        public string? PreviewImagePath
+        {
+            get
+            {
+                if (PreviewImageFileName == null)
+                {
+                    return null;
+                }
+
+                return ImageFilesDirectory + PreviewImageFileName;
+            }
+        }
+
+        public string? PreviewImageForClient
+        {
+            get
+            {
+                if (PreviewImageFileName == null)
+                {
+                    return null;
+                }
+
+                return "Images/ArticlePreviewsImages/" + PreviewImageFileName;
+            }
+        }
+
+
 
         public DateTimeOffset Created { get; set; } = DateTimeOffset.UtcNow;
     }

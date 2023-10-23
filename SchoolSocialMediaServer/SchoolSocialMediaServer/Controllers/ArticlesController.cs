@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.FileProviders;
 using SchoolSocialMediaServer.Entities;
 using SchoolSocialMediaServer.Models;
 using SchoolSocialMediaServer.Repositories;
@@ -144,6 +145,97 @@ namespace SchoolSocialMediaServer.Controllers
 
             _unitOfWork.ArticleRepository
                 .Like(article, user);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [Consumes("multipart/form-data")]
+        [HttpPost("{id}/add_preview_image")]
+        public async Task<ActionResult<string>> AddArticlePreviewImage(
+            Guid id, [FromForm] AddImageDto addImageDto)
+        {
+            await RemovePreviewImage(id);
+
+            var article = await _unitOfWork.ArticleRepository
+                .GetByIdAsync(id);
+
+            if (article == null)
+            {
+                return NotFound(nameof(id));
+            }
+
+            var image = addImageDto.Image;
+
+            var fileExtension = Path.GetExtension(image.FileName);
+
+            var imageFileName = Guid.NewGuid().ToString() + fileExtension;
+
+            var projectDirectory = Directory.GetCurrentDirectory();
+
+            if (projectDirectory == null)
+            {
+                throw new Exception("Saving error");
+            }
+
+            var articlePreviewImagesPath = Path.Combine(
+                projectDirectory, Article.ImageFilesDirectory);
+
+            Console.WriteLine(articlePreviewImagesPath);
+
+            var filePath = new PhysicalFileProvider(articlePreviewImagesPath).Root + imageFileName;
+
+            var fileStream = System.IO.File.Create(filePath);
+
+            await image.CopyToAsync(fileStream);
+
+            fileStream.Flush();
+
+            fileStream.Close();
+
+            article.PreviewImageFileName = imageFileName;
+
+            await _unitOfWork.SaveChangesAsync();
+
+            if (article.PreviewImagePath == null)
+            {
+                return BadRequest(nameof(article.PreviewImageFileName));
+            }
+
+            return article.PreviewImagePath;
+        }
+
+        [HttpDelete("{id}/remove_preview_image")]
+        public async Task<ActionResult> RemovePreviewImage(Guid id)
+        {
+            var article = await _unitOfWork.ArticleRepository
+                .GetByIdAsync(id);
+
+            if (article == null)
+            {
+                return NotFound(nameof(id));
+            }
+
+            if (article.PreviewImagePath == null)
+            {
+                return BadRequest(nameof(article.PreviewImagePath));
+            }
+
+            var projectDirectory = Directory.GetCurrentDirectory();
+
+            if (projectDirectory == null)
+            {
+                throw new Exception();
+            }
+
+
+            var imagePath = Path.Combine(
+                projectDirectory, article.PreviewImagePath);
+
+            System.IO.File.Delete(imagePath);
+
+            article.PreviewImageFileName = null;
 
             await _unitOfWork.SaveChangesAsync();
 

@@ -1,0 +1,22 @@
+.main-page__articles {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 32px;
+}
+
+@media screen and (max-width: 480px) {
+}
+
+@media screen and (max-width: 769px) {
+  .main-page__articles {
+    gap: 3vw;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+}
+
+@media screen and (max-width: 1280px) {
+}
