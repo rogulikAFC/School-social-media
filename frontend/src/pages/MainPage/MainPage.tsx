@@ -1,8 +1,45 @@
-import { FC } from "react";
+import { useEffect, useState } from "react";
+import { config } from "../../../config";
 import ArticleCard from "../../ArticleCard/ArticleCard";
-import "./MainPage.css"
+import "./MainPage.css";
+import Preloader from "../../Preloader/Preloader";
+import loadMoreIcon from "../../assets/LoadMoreIcon.svg";
 
-const MainPage: FC = () => {
+const MainPage = () => {
+  const [articles, setArticles] = useState<Article[]>();
+  const [pageNum, setPageNum] = useState<number>(1);
+  const [isLastPage, setIsLastPage] = useState<boolean>(false);
+  const pageSize = 4;
+
+  useEffect(() => {
+    const getArticles = async () => {
+      if (isLastPage) {
+        return;
+      }
+
+      let response = await fetch(
+        config.SERVER_URL + `api/Articles?pageNum=${pageNum}&pageSize=${pageSize}`
+      );
+      let json = await response.json();
+
+      let articlesFromJson: Article[] = json;
+
+      if (articlesFromJson.length < pageSize) {
+        setIsLastPage(true);
+      }
+
+      if (!articles) {
+        setArticles(articlesFromJson);
+
+        return;
+      }
+
+      setArticles((prevArticles) => [...prevArticles!, ...articlesFromJson]);
+    };
+
+    getArticles();
+  }, [pageNum]);
+
   let category: Category = {
     name: "Test category",
     id: "lakjlkadsjflkasdjflaksdjf",
@@ -38,38 +75,65 @@ const MainPage: FC = () => {
   };
 
   return (
-    <div className="main-page__articles">
-      <ArticleCard
-        article={article}
-        key={article.id + "1"}
-        blockName="main-page"
-      />
-      <ArticleCard
-        article={article}
-        key={article.id + "2"}
-        blockName="main-page"
-      />
-      <ArticleCard
-        article={article}
-        key={article.id + "3"}
-        blockName="main-page"
-      />
-      <ArticleCard
-        article={article}
-        key={article.id + "4"}
-        blockName="main-page"
-      />
-      <ArticleCard
-        article={article}
-        key={article.id + "5"}
-        blockName="main-page"
-      />
-      <ArticleCard
-        article={article}
-        key={article.id + "6"}
-        blockName="main-page"
-      />
-    </div>
+    <>
+      <div className="main-page__articles">
+        {/* <ArticleCard
+          article={article}
+          key={article.id + "1"}
+          blockName="main-page"
+        />
+        <ArticleCard
+          article={article}
+          key={article.id + "2"}
+          blockName="main-page"
+        />
+        <ArticleCard
+          article={article}
+          key={article.id + "3"}
+          blockName="main-page"
+        />
+        <ArticleCard
+          article={article}
+          key={article.id + "4"}
+          blockName="main-page"
+        />
+        <ArticleCard
+          article={article}
+          key={article.id + "5"}
+          blockName="main-page"
+        />
+        <ArticleCard
+          article={article}
+          key={article.id + "6"}
+          blockName="main-page"
+        /> */}
+        {articles ? (
+          articles.map((article) => (
+            <ArticleCard
+              article={article}
+              key={article.id}
+              blockName="main-page"
+            />
+          ))
+        ) : (
+          <Preloader />
+        )}
+      </div>
+
+      {articles ? (
+        <button
+          className="main-page__load-more-btn"
+          onClick={() => {
+            setPageNum((prevPageNum) => ++prevPageNum);
+          }}
+        >
+          <img src={loadMoreIcon} alt="" />
+          Загрузить ещё
+        </button>
+      ) : (
+        ""
+      )}
+    </>
   );
 };
 

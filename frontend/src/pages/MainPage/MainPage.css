@@ -6,6 +6,23 @@
   gap: 32px;
 }
 
+.main-page__load-more-btn {
+  display: flex;
+  flex-direction: row;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #779CFF;
+  align-items: center;
+  justify-content: center;
+  column-gap: 5px;
+  background: unset;
+  border: unset;
+  margin-top: clamp(15px, 5vw, 56px);
+}
+
 @media screen and (max-width: 480px) {
 }
 

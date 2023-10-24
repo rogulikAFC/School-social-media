@@ -4,6 +4,8 @@
   width: 432px;
   background: white;
   border-radius: 15px;
+  cursor: pointer;
+  justify-content: space-between;
 }
 
 .article-card__header {

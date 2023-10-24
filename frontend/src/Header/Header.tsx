@@ -7,10 +7,6 @@ import Menu from "../assets/Menu.svg";
 const Header: FC<{ blockName: string }> = ({ blockName }) => {
   const [mobileMenuOpened, setMobileMenuOpened] = useState<boolean>(false);
 
-  useEffect(() => {
-    console.log(mobileMenuOpened);
-  }, [mobileMenuOpened]);
-
   return (
     <header className={`header ${blockName}__header`}>
       <div className="header-elements header__header-elements">
