@@ -1,0 +1,15 @@
+.share-button {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  background: #F4F7FF;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.share-button img {
+  width: 18px;
+  height: 18px;
+}

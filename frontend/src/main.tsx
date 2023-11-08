@@ -5,6 +5,7 @@ import "./reset.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MainLayout from "./pages/Layouts/MainLayout/MainLayout";
 import MainPage from "./pages/MainPage/MainPage";
+import ArticlePage from "./pages/ArticlePage/ArticlePage"
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
         path: "",
         element: <MainPage />,
       },
+      {
+        path: "article/:articleId",
+        element: <ArticlePage />
+      }
     ],
   },
 ]);

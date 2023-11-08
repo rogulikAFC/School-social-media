@@ -12,7 +12,7 @@ namespace SchoolSocialMediaServer.Entities
         public Guid Id { get; set; }
 
         [Required]
-        [MaxLength(64)]
+        [MaxLength(128)]
         public string Title { get; set; } = null!;
 
         [Required]

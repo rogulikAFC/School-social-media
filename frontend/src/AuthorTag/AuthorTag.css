@@ -1,0 +1,21 @@
+.author-tag {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 8px;
+}
+
+.author-tag img {
+  width: 20px;
+  height: 20px;
+  object-fit: cover;
+  border-radius: 50px;
+}
+
+.author-tag figcaption {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: left;
+}

@@ -77,36 +77,6 @@ const MainPage = () => {
   return (
     <>
       <div className="main-page__articles">
-        {/* <ArticleCard
-          article={article}
-          key={article.id + "1"}
-          blockName="main-page"
-        />
-        <ArticleCard
-          article={article}
-          key={article.id + "2"}
-          blockName="main-page"
-        />
-        <ArticleCard
-          article={article}
-          key={article.id + "3"}
-          blockName="main-page"
-        />
-        <ArticleCard
-          article={article}
-          key={article.id + "4"}
-          blockName="main-page"
-        />
-        <ArticleCard
-          article={article}
-          key={article.id + "5"}
-          blockName="main-page"
-        />
-        <ArticleCard
-          article={article}
-          key={article.id + "6"}
-          blockName="main-page"
-        /> */}
         {articles ? (
           articles.map((article) => (
             <ArticleCard

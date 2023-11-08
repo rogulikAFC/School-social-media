@@ -1,4 +1,5 @@
 import { config } from "../../config.ts";
+import AuthorTag from "../AuthorTag/AuthorTag.tsx";
 import CategoryTag from "../CategoryTag/CategoryTag.tsx";
 import "./ArticleCard.css";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +12,6 @@ type ArticleCardProps = {
 const ArticleCard = ({ article, blockName }: ArticleCardProps) => {
   const navigate = useNavigate();
 
-  let userImage = config.SERVER_URL + article.user.imagePath;
   let artilcePreviewImage = config.SERVER_URL + article.previewImagePath;
 
   let date = new Date(article.createdUTC + " GMT");
@@ -30,10 +30,7 @@ const ArticleCard = ({ article, blockName }: ArticleCardProps) => {
       onClick={() => navigate(articleURL)}
     >
       <div className="article-card__header">
-        <figure className="article-card__author">
-          {article.user.imagePath === "null" ? <img src={userImage} /> : ""}
-          <figcaption>Автор: {article.user.name}</figcaption>
-        </figure>
+        <AuthorTag blockName="article-card" user={article.user} />
 
         <span className="article-card__date">{dateString}</span>
       </div>
@@ -50,7 +47,7 @@ const ArticleCard = ({ article, blockName }: ArticleCardProps) => {
       <div className="article-card__content">
         <div className="article-card__title">{article.title}</div>
         {article.category ? (
-          <CategoryTag category={article.category} blockName="article-card" />
+          <CategoryTag category={article.category} blockName="article-card" isFilled={false} modificatorName={null} />
         ) : (
           ""
         )}

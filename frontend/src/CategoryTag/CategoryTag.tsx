@@ -1,13 +1,23 @@
-import { FC } from "react";
 import "./CategoryTag.css";
 
-const CategoryTag: FC<{ category: Category; blockName: string }> = ({
+type CategoryProps = {
+  category: Category;
+  blockName: string;
+  isFilled: boolean;
+  modificatorName: string | null;
+};
+
+const CategoryTag = ({
   category,
   blockName,
-}) => {
+  isFilled,
+  modificatorName,
+}: CategoryProps) => {
   return (
     <a
-      className={`category-tag ${blockName}__category-tag`}
+      className={`category-tag ${blockName}__category-tag ${
+        isFilled ? "category-tag_filled" : ""
+      } ${modificatorName ? `category-tag_${modificatorName}` : ""}`}
       key={category.id}
     >
       {category.name}
