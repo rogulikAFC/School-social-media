@@ -53,39 +53,49 @@ const ArticlePage = () => {
 
   return article ? (
     <div className="article-container main-page__article-container">
-      <div className="article-container__heading">
+      <div
+        className={`article-container__heading ${
+          article.previewImagePath ? "" : "article-container__heading_no-image"
+        }`}
+      >
         <ShareContainer
           location={location.toString()}
           title={articleFullTitle}
           blockName="article-container"
-          modificatorName="top"
+          modificatorNames={
+            article.previewImagePath ? ["top"] : ["top", "no-image"]
+          }
         />
 
-        <div
-          className="article-container__heading-background-image"
-          style={{
-            backgroundImage: `url(${
-              config.SERVER_URL + article.previewImagePath
-            })`,
-          }}
-        />
-        <div className="article-container__left">
-          {article.previewImagePath ? (
+        {article.previewImagePath ? (
+          <div
+            className="article-container__heading-background-image"
+            style={{
+              backgroundImage: `url(${
+                config.SERVER_URL + article.previewImagePath
+              })`,
+            }}
+          />
+        ) : (
+          ""
+        )}
+        {article.previewImagePath ? (
+          <div className="article-container__left">
             <CategoryTag
               blockName="article-container"
               category={article!.category}
               isFilled={true}
               modificatorName={null}
             />
-          ) : (
-            ""
-          )}
-          <img
-            src={config.SERVER_URL + article.previewImagePath}
-            alt=""
-            className="article-container__preview-img"
-          />
-        </div>
+            <img
+              src={config.SERVER_URL + article.previewImagePath}
+              alt=""
+              className="article-container__preview-img"
+            />
+          </div>
+        ) : (
+          ""
+        )}
 
         {article.previewImagePath ? (
           ""
@@ -98,8 +108,18 @@ const ArticlePage = () => {
           />
         )}
 
-        <div className="article-container__right">
-          <div className="article-container__additional-info">
+        <div
+          className={`article-container__right ${
+            article.previewImagePath ? "" : "article-container__right_no-image"
+          }`}
+        >
+          <div
+            className={`article-container__additional-info ${
+              article.previewImagePath
+                ? ""
+                : "article-container__additional-info_no-image"
+            }`}
+          >
             <AuthorTag blockName="article-container" user={article!.user} />
             <span className="article-container__views">
               {article.viewsCount} просмотров
@@ -109,13 +129,21 @@ const ArticlePage = () => {
             </span>
           </div>
 
-          <div className="article-container__title">{article.title}</div>
+          <div
+            className={`article-container__title ${
+              article.previewImagePath
+                ? ""
+                : "article-container__title_no-image"
+            }`}
+          >
+            {article.title}
+          </div>
 
           <ShareContainer
             location={location.toString()}
             title={articleFullTitle}
             blockName="article-container"
-            modificatorName="bottom"
+            modificatorNames={article.previewImagePath ? ["bottom", "with-image"] : ["bottom", "no-image"]}
           />
         </div>
       </div>
@@ -123,24 +151,7 @@ const ArticlePage = () => {
       <div
         className="article-container__content"
         dangerouslySetInnerHTML={{ __html: article.content }}
-      >
-        {/* {article.content} */}
-        {/* Lorem, ipsum dolor sit amet consectetur adipisicing elit. Debitis ratione quos incidunt aspernatur odio, obcaecati totam non labore eum ad deleniti optio sint consequuntur commodi illum rerum maiores laborum. Ullam?
-        Exercitationem doloremque numquam quasi enim, totam dolorum voluptatem nisi similique autem magnam labore, ad veritatis nobis quis iusto fugiat asperiores architecto sequi laborum qui ipsum officiis. Veritatis itaque illo dignissimos.
-        Error voluptatibus animi doloribus voluptas aperiam nemo, ducimus aut cupiditate at laboriosam aspernatur aliquam quas eius voluptate ipsam. Voluptatibus in officiis minus iure consequatur vero ab corporis laborum, harum quibusdam?
-        Hic reprehenderit unde id deserunt esse tempore in exercitationem molestias necessitatibus eligendi alias adipisci vitae assumenda omnis eum nesciunt quod quae quis, aut nulla totam dolores cupiditate facere aperiam? Et?
-        Adipisci dignissimos maxime vero a nulla ratione voluptatum cum est ea reiciendis odit aut excepturi asperiores neque, vitae veritatis repudiandae minus amet inventore laborum perferendis? Illo architecto ratione repellendus voluptatum?
-        Laudantium ipsum atque, nam sapiente quia consectetur adipisci harum obcaecati, vitae error placeat molestias? Nisi dolor quos expedita ex mollitia deserunt optio accusamus, corporis dolorem quia doloribus aperiam placeat laboriosam.
-        Quis esse cum perspiciatis laudantium saepe, molestias dolores nam, voluptas ducimus vel voluptates eum veniam assumenda pariatur quisquam est vero distinctio deserunt eaque unde error soluta numquam at aliquid. Obcaecati!
-        Fugiat eos corporis dolore distinctio voluptate consequatur, repellat eaque, sed iste ratione repudiandae vero voluptatibus. Voluptatem modi sint assumenda obcaecati culpa! Similique iusto dolorum animi sit quaerat at atque distinctio.
-        Est molestias magni magnam laudantium animi esse! Labore, aspernatur maxime? Illum amet, provident quia consectetur voluptates esse labore sint ad beatae accusamus minus aliquid tempore soluta repudiandae aspernatur. Excepturi, quae!
-        Ipsum nihil beatae recusandae veritatis itaque, iusto, possimus reprehenderit libero sit nulla aliquam dolorem? Necessitatibus dicta tenetur pariatur dolor harum voluptatibus. Neque esse doloribus vero soluta expedita quas dolor molestiae.
-        Accusamus neque voluptatibus, aspernatur fugiat, quam eveniet quasi at aperiam cum animi iure amet id illo reiciendis maiores quae delectus minus, voluptas veritatis voluptatum eaque porro dignissimos sit cumque. Dicta.
-        Exercitationem, eum delectus odio neque odit similique hic ab ratione expedita impedit harum officiis corporis quo iusto earum placeat illo totam dignissimos unde. Magnam obcaecati, quo expedita facere quidem harum.
-        Voluptatem aspernatur facere pariatur illo reprehenderit deleniti molestias eveniet quia eaque, officia quam optio quidem eos ipsa vero nemo corporis molestiae ut nam illum eius ab perferendis. Ducimus, minus nulla.
-        Aliquam tenetur culpa molestias pariatur enim magni assumenda eligendi dicta vel nam excepturi omnis cupiditate a odit eaque aliquid iste architecto quasi sunt, consequatur reprehenderit! Ratione accusamus earum impedit iste?
-        Accusantium, libero eveniet! Assumenda iusto reprehenderit repudiandae nesciunt sed asperiores est labore ab neque commodi nulla dignissimos magni cumque itaque nisi, inventore consequatur. Quam, dolores doloremque soluta officiis quia quisquam. */}
-      </div>
+      />
     </div>
   ) : (
     <Preloader />

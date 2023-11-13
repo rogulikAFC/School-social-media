@@ -2,23 +2,25 @@ import ShareButton from "../ShareButton/ShareButton";
 import WAIcon from "../assets/WAIcon.svg";
 import TelegramIcon from "../assets/TelegramIcon.svg";
 import VKIcon from "../assets/VKIcon.svg";
-import "./ShareContainer.css"
+import "./ShareContainer.css";
 
 type ShareContainerProps = {
   location: string;
   title: string;
   blockName: string;
-  modificatorName: string;
+  modificatorNames: string[];
 };
 
 const ShareContainer = ({
   location,
   title,
   blockName,
-  modificatorName,
+  modificatorNames,
 }: ShareContainerProps) => (
   <div
-    className={`share-container share-container_${modificatorName} ${blockName}__share-container`}
+    className={`${modificatorNames
+      .map((mn) => `share-container share-container_${mn}`)
+      .join(" ")} ${blockName}__share-container`}
   >
     Поделиться:
     <div className="share-container__buttons">
