@@ -1,4 +1,5 @@
 .article-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 432px;
@@ -6,6 +7,16 @@
   border-radius: 15px;
   cursor: pointer;
   justify-content: space-between;
+  transition: all 0.15s ease-out;
+}
+
+.article-card:hover {
+  transform: translateY(-15px);
+  box-shadow: 0px 32px 50px 0px #E1E9FFCC;
+}
+
+.article-card:hover .article-card__title {
+  color: #779CFF;
 }
 
 .article-card__header {
@@ -18,9 +29,6 @@
   text-align: left;
   padding: 18px;
   justify-content: space-between;
-}
-
-.article-card__date {
 }
 
 .article-card__preview-image {
@@ -41,6 +49,7 @@
   letter-spacing: 0em;
   text-align: left;
   margin-bottom: 32px;
+  transition: 0.15s all;
 }
 
 .article-card__category-tag {

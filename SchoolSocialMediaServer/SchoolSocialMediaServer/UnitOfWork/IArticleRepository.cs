@@ -5,7 +5,7 @@ namespace SchoolSocialMediaServer.UnitOfWork
     public interface IArticleRepository
     {
         Task<IEnumerable<Article>> ListAsync(
-            int pageNum, int pageSize,
+            int pageNum, int pageSize, string? query,
             Guid? schoolId, Guid? categoryId, Guid? userId);
         Task<Article?> GetByIdAsync(Guid id);
         void Add(Article article);

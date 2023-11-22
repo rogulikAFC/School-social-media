@@ -2,6 +2,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  margin: 25px 3vw 0 3vw;
   background-color: white;
   padding-bottom: 88px;
   border-radius: 13px;
@@ -157,6 +158,16 @@
     line-height: 24px;
     letter-spacing: 0em;
     text-align: left;
+  }
+
+  .article-container {
+    margin: 0;
+  }
+
+  .article-container__heading-background-image,
+  .article-container__heading-background-image::after,
+  .main-page__article-container {
+    border-radius: 0;
   }
 }
 

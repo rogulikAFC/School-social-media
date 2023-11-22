@@ -1,0 +1,36 @@
+.field_text-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.field_text-field input::placeholder {
+  opacity: 30%;
+  color: #2f2f2f;
+}
+
+.field_text-field input {
+  outline: none;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 32px;
+  text-align: left;
+  letter-spacing: 0em;
+}
+
+.field_text-field input:focus {
+  outline: none;
+}
+
+.field__sizer {
+  outline: none;
+  position: absolute;
+  visibility: hidden;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 32px;
+  color: red;
+  text-align: left;
+  letter-spacing: 0em;
+  word-wrap: normal;
+}

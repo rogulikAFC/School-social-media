@@ -26,7 +26,7 @@ const ArticleCard = ({ article, blockName }: ArticleCardProps) => {
 
   return (
     <div
-      className={`article-card ${blockName}_article-card`}
+      className={`article-card ${blockName}__article-card`}
       onClick={() => navigate(articleURL)}
     >
       <div className="article-card__header">

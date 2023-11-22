@@ -12,8 +12,6 @@ const ArticlePage = () => {
 
   const [article, setArticle] = useState<ArticleWithContent>();
 
-  // let titleHeight = document.getElementById("article-container__title")?.clientHeight;
-
   useEffect(() => {
     const getArticle = async () => {
       let response = await fetch(
@@ -24,16 +22,7 @@ const ArticlePage = () => {
       setArticle(articleFromJson);
     };
 
-    // const getTitleHeight = () => {
-    //   var title = document.getElementById("article-container__title");
-
-    //   console.log(title);
-
-    //   setTitleHeight(title?.clientHeight);
-    // };
-
     getArticle();
-    // getTitleHeight();
   }, []);
 
   let date = new Date(article?.createdUTC + " GMT");

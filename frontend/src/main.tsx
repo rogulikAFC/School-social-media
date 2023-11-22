@@ -5,7 +5,8 @@ import "./reset.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MainLayout from "./pages/Layouts/MainLayout/MainLayout";
 import MainPage from "./pages/MainPage/MainPage";
-import ArticlePage from "./pages/ArticlePage/ArticlePage"
+import ArticlePage from "./pages/ArticlePage/ArticlePage";
+import SearchPage from "./pages/SearchPage/SearchPage";
 
 const router = createBrowserRouter([
   {
@@ -17,15 +18,17 @@ const router = createBrowserRouter([
         element: <MainPage />,
       },
       {
+        path: "search",
+        element: <SearchPage />,
+      },
+      {
         path: "article/:articleId",
-        element: <ArticlePage />
-      }
+        element: <ArticlePage />,
+      },
     ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+  <RouterProvider router={router} />
 );

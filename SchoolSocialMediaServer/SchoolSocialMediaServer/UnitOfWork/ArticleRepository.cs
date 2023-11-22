@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SchoolSocialMediaServer.DbContexts;
 using SchoolSocialMediaServer.Entities;
-using SchoolSocialMediaServer.Repositories;
-
 namespace SchoolSocialMediaServer.UnitOfWork
 {
     public class ArticleRepository : IArticleRepository
@@ -49,9 +47,11 @@ namespace SchoolSocialMediaServer.UnitOfWork
         }
 
         public async Task<IEnumerable<Article>> ListAsync(
-            int pageNum, int pageSize,
+            int pageNum, int pageSize, string? query,
             Guid? schoolId, Guid? categoryId, Guid? userId)
         {
+            query = query?.ToLower();
+
             return await _socialMediaDbContext.Articles
                 .Include(a => a.User)
                 .Include(a => a.School)
@@ -74,12 +74,10 @@ namespace SchoolSocialMediaServer.UnitOfWork
                     Reports = a.Reports,
                     PreviewImageFileName = a.PreviewImageFileName,
                 })
-                .Where(a =>
-                    categoryId == null ? true : a.CategoryId == categoryId
-                    &&
-                    schoolId == null ? true : a.SchoolId == schoolId
-                    &&
-                    userId == null ? true: a.UserId == userId)
+                .Where(a => categoryId == null || a.CategoryId == categoryId)
+                .Where(a => schoolId == null || a.SchoolId == schoolId)
+                .Where(a => userId == null || a.UserId == userId)
+                .Where(a => query == null || a.Title.ToLower().Contains(query))
                 .Skip((pageNum - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();

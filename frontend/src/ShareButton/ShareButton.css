@@ -7,9 +7,18 @@
   background: #F4F7FF;
   border-radius: 10px;
   cursor: pointer;
+  transition: background 0.15s;
 }
 
 .share-button img {
   width: 18px;
   height: 18px;
+}
+
+.share-button:hover {
+  background: #7399FF;
+}
+
+.share-button:hover img {
+  filter: brightness(200%);
 }

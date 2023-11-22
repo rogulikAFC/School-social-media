@@ -1,25 +1,8 @@
 .main-page__articles {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 32px;
+  margin: 25px 3vw 0 3vw;
 }
 
 .main-page__load-more-btn {
-  display: flex;
-  flex-direction: row;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 24px;
-  letter-spacing: 0em;
-  text-align: left;
-  color: #779CFF;
-  align-items: center;
-  justify-content: center;
-  column-gap: 5px;
-  background: unset;
-  border: unset;
   margin-top: clamp(15px, 5vw, 56px);
 }
 
