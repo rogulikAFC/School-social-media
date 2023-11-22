@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import ArticlesContainer from "../../ArticlesContainer/ArticlesContainer";
 import { config } from "../../../config";
-import loadMoreIcon from "../../assets/LoadMoreIcon.svg";
+import LoadMoreArticles from "../../LoadMoreArticles/LoadMoreArticles";
 
 const SearchPage = () => {
   const [searchParams] = useSearchParams();
@@ -12,6 +12,8 @@ const SearchPage = () => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [pageNum, setPageNum] = useState<number>(1);
   const [isLastPage, setIsLastPage] = useState<boolean>(false);
+  const [isLoaded, setIsLoaded] = useState<boolean>(true);
+
   const pageSize = 4;
 
   useEffect(() => {
@@ -19,6 +21,8 @@ const SearchPage = () => {
       if (isLastPage) {
         return;
       }
+
+      setIsLoaded(false);
 
       const response = await fetch(
         config.SERVER_URL +
@@ -32,6 +36,8 @@ const SearchPage = () => {
       }
 
       setArticles((prevArticles) => [...prevArticles, ...articlesFromJson]);
+
+      setIsLoaded(true);
     };
 
     getArticles();
@@ -42,28 +48,33 @@ const SearchPage = () => {
       return;
     }
 
-    console.log(searchParams)
-    window.location.reload()
-  }, [searchParams])
+    console.log(searchParams);
+    window.location.reload();
+  }, [searchParams]);
 
   useEffect(() => {
-    setIsFirstTimeLoading(false)
-  }, [])
+    setIsFirstTimeLoading(false);
+  }, []);
 
   return (
     <>
       <ArticlesContainer articles={articles} blockName="main-page" />
 
       {articles ? (
-        <button
-          className="main-page__load-more-btn"
-          onClick={() => {
-            setPageNum((prevPageNum) => ++prevPageNum);
-          }}
-        >
-          <img src={loadMoreIcon} alt="" />
-          Загрузить ещё
-        </button>
+        // <button
+        //   className="main-page__load-more-btn"
+        //   onClick={() => {
+        //     setPageNum((prevPageNum) => ++prevPageNum);
+        //   }}
+        // >
+        //   <img src={loadMoreIcon} alt="" />
+        //   Загрузить ещё
+        // </button>
+        <LoadMoreArticles
+          onClick={() => setPageNum((prevPageNum) => ++prevPageNum)}
+          blockName="main-page"
+          isLoaded={isLoaded}
+        />
       ) : (
         ""
       )}
