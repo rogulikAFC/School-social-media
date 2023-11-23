@@ -1,6 +1,4 @@
-﻿using AutoMapper.Configuration.Annotations;
-using SchoolSocialMediaServer.Migrations;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolSocialMediaServer.Entities

@@ -12,8 +12,8 @@ using SchoolSocialMediaServer.DbContexts;
 namespace SchoolSocialMediaServer.Migrations
 {
     [DbContext(typeof(SchoolSocialMediaDbContext))]
-    [Migration("20231013051338_UserSchoolAltered")]
-    partial class UserSchoolAltered
+    [Migration("20231123051521_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,13 +60,16 @@ namespace SchoolSocialMediaServer.Migrations
                     b.Property<DateTimeOffset>("Created")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("PreviewImageFileName")
+                        .HasColumnType("text");
+
                     b.Property<Guid>("SchoolId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("character varying(64)");
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");

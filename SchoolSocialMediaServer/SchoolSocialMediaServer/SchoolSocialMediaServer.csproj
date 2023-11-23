@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Migrations\" />
     <Folder Include="wwwroot\Images\SchoolImages\" />
     <Folder Include="wwwroot\Images\UserImages\" />
     <Folder Include="wwwroot\Images\ArticlePreviewsImages\" />
