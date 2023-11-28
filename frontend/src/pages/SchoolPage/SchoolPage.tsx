@@ -1,11 +1,8 @@
-import "./MainPage.css";
 import ArticlesContainer from "../../ArticlesContainer/ArticlesContainer";
 import LoadMoreArticles from "../../LoadMoreArticles/LoadMoreArticles";
-import useArticlesFetching, {
-  UseArticlesFetchingResult,
-} from "../../hooks/useArticlesFetching";
+import useArticlesFetching, { UseArticlesFetchingResult } from "../../hooks/useArticlesFetching";
 
-const MainPage = () => {
+const SchoolPage = () => {
   const { articles, loadNextPage, isLoaded }: UseArticlesFetchingResult =
     useArticlesFetching({
       pageSize: 4,
@@ -18,7 +15,7 @@ const MainPage = () => {
 
       {articles ? (
         <LoadMoreArticles
-          onClick={loadNextPage}
+          onClick={() => loadNextPage}
           blockName="main-page"
           isLoaded={isLoaded}
         />
@@ -29,4 +26,4 @@ const MainPage = () => {
   );
 };
 
-export default MainPage;
+export default SchoolPage;

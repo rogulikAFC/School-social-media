@@ -27,8 +27,8 @@ const Header = ({ blockName }: HeaderProps) => {
     { name: "Тестовая 4", onClick: () => navigate("") },
   ];
 
-  const headerElements = headerElementsProps.map((props) => (
-    <HeaderElement {...props} />
+  const headerElements = headerElementsProps.map((props, index) => (
+    <HeaderElement {...props} key={index} />
   ));
 
   return (
