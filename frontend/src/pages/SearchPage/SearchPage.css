@@ -1,0 +1,35 @@
+.search-entities-container_schools {
+  margin: 25px 3vw 0 3vw;
+}
+
+.search-entities-container_articles {
+  margin: 3vw 0;
+}
+
+.search-entities-container__articles {
+  max-width: 100%;
+  width: 100%;
+}
+
+.search-entities-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 25px 3vw 0 3vw;
+}
+
+.main-page__search-entities-container {
+  margin-bottom: 88px;
+}
+
+.search-entities-container__load-more-btn {
+  margin-top: clamp(15px, 5vw, 56px);
+}
+
+.search-entities-container__title {
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 48px;
+  letter-spacing: 0em;
+  margin-bottom: clamp(15px, 5vw, 56px);
+}

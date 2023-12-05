@@ -15,9 +15,13 @@ namespace SchoolSocialMediaServer.Repositories
         }
 
         public async Task<IEnumerable<School>> GetSchoolsAsync(
-            int pageNum, int pageSize)
+            int pageNum, int pageSize, string? query)
         {
             return await _socialMediaDbContext.Schools
+                .Where(s => 
+                    query == null 
+                    || s.Address.ToLower().Contains(query) 
+                    || s.Name.ToLower().Contains(query))
                 .Skip((pageNum - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();

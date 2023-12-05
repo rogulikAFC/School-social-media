@@ -59,6 +59,8 @@ const SearchField = ({ blockName, onCancelClick }: SearchFieldProps) => {
     }
 
     navigate({ pathname: "search", search: `?q=${query}` });
+
+    location.reload()
   };
 
   return (

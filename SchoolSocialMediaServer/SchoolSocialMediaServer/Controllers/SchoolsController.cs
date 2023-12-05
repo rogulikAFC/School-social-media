@@ -27,10 +27,10 @@ namespace SchoolSocialMediaServer.Controllers
 
         [HttpGet]
         public async Task<ActionResult<ICollection<SchoolDto>>> ListSchools(
-            [FromQuery] int pageNum = 1, [FromQuery] int pageSize = 5)
+            [FromQuery] string? query, [FromQuery] int pageNum = 1, [FromQuery] int pageSize = 5)
         {
             var schoolEntities = await _unitOfWork.SchoolRepository
-                .GetSchoolsAsync(pageNum, pageSize);
+                .GetSchoolsAsync(pageNum, pageSize, query);
 
             var schoolDtos = new List<SchoolDto>();
 

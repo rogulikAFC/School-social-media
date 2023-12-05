@@ -1,0 +1,15 @@
+.blured-background-image {
+  position: absolute;
+  object-fit: cover;
+}
+
+.blured-background-image::after {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  border-radius: inherit;
+}

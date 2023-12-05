@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import "./reset.css";
@@ -7,6 +6,7 @@ import MainLayout from "./pages/Layouts/MainLayout/MainLayout";
 import MainPage from "./pages/MainPage/MainPage";
 import ArticlePage from "./pages/ArticlePage/ArticlePage";
 import SearchPage from "./pages/SearchPage/SearchPage";
+import SchoolPage from "./pages/SchoolPage/SchoolPage";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +25,10 @@ const router = createBrowserRouter([
         path: "article/:articleId",
         element: <ArticlePage />,
       },
+      {
+        path: "school/:schoolId",
+        element: <SchoolPage />
+      }
     ],
   },
 ]);

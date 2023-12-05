@@ -6,21 +6,30 @@ import "./ShareContainer.css";
 
 type ShareContainerProps = {
   location: string;
-  title: string;
+  title: string | null;
   blockName: string;
   modificatorNames: string[];
 };
+
+type ShareContainerPropsWithOptions = PartialBy<
+  ShareContainerProps,
+  "modificatorNames"
+>;
 
 const ShareContainer = ({
   location,
   title,
   blockName,
   modificatorNames,
-}: ShareContainerProps) => (
+}: ShareContainerPropsWithOptions) => (
   <div
-    className={`${modificatorNames
-      .map((mn) => `share-container share-container_${mn}`)
-      .join(" ")} ${blockName}__share-container`}
+    className={`${
+      modificatorNames
+        ? modificatorNames
+            .map((mn) => `share-container_${mn}`)
+            .join(" ")
+        : ""
+    } share-container ${blockName}__share-container`}
   >
     Поделиться:
     <div className="share-container__buttons">

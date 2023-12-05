@@ -1,80 +1,74 @@
-import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import ArticlesContainer from "../../ArticlesContainer/ArticlesContainer";
-import { config } from "../../../config";
-import LoadMoreArticles from "../../LoadMoreArticles/LoadMoreArticles";
+import LoadMoreEntities from "../../LoadMoreArticles/LoadMoreEntities";
+import useFetchingWithPagination from "../../hooks/useFetchingWithPagination";
+import SchoolCard from "../../SchoolCard/SchoolCard";
+import "./SearchPage.css";
 
 const SearchPage = () => {
   const [searchParams] = useSearchParams();
   const { q: query } = Object.fromEntries(searchParams);
 
-  const [isFirstTimeLoading, setIsFirstTimeLoading] = useState<boolean>(true);
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [pageNum, setPageNum] = useState<number>(1);
-  const [isLastPage, setIsLastPage] = useState<boolean>(false);
-  const [isLoaded, setIsLoaded] = useState<boolean>(true);
+  const {
+    entities: articleEntities,
+    loadNextPage: loadNextArticlesPage,
+    isLoaded: isArticlesLoaded,
+  } = useFetchingWithPagination<Article>({
+    pageSize: 4,
+    searchParams: [`query=${query}`],
+    relativeUrlWithoutParams: "api/Articles",
+  });
 
-  const pageSize = 4;
-
-  useEffect(() => {
-    const getArticles = async () => {
-      if (isLastPage) {
-        return;
-      }
-
-      setIsLoaded(false);
-
-      const response = await fetch(
-        config.SERVER_URL +
-          `api/articles?query=${query}&pageNum=${pageNum}&pageSize=${pageSize}`
-      );
-
-      const articlesFromJson: Article[] = await response.json();
-
-      if (articlesFromJson.length < pageNum) {
-        setIsLastPage(false);
-      }
-
-      setArticles((prevArticles) => [...prevArticles, ...articlesFromJson]);
-
-      setIsLoaded(true);
-    };
-
-    getArticles();
-  }, [pageNum]);
-
-  useEffect(() => {
-    if (isFirstTimeLoading) {
-      return;
-    }
-
-    console.log(searchParams);
-    window.location.reload();
-  }, [searchParams]);
-
-  useEffect(() => {
-    setIsFirstTimeLoading(false);
-  }, []);
+  const {
+    entities: schoolEntities,
+    loadNextPage: loadNextSchoolPage,
+    isLoaded: isSchoolsLoaded,
+  } = useFetchingWithPagination<School>({
+    pageSize: 4,
+    searchParams: [`query=${query}`],
+    relativeUrlWithoutParams: "api/Schools",
+  });
 
   return (
     <>
-      <ArticlesContainer articles={articles} blockName="main-page" />
+      {schoolEntities.length > 0 ? (
+        <div className="search-entities-container main-page__search-entities-container search-entities-container_schools">
+          <div className="search-entities-container__title">Школы</div>
 
-      {articles ? (
-        // <button
-        //   className="main-page__load-more-btn"
-        //   onClick={() => {
-        //     setPageNum((prevPageNum) => ++prevPageNum);
-        //   }}
-        // >
-        //   <img src={loadMoreIcon} alt="" />
-        //   Загрузить ещё
-        // </button>
-        <LoadMoreArticles
-          onClick={() => setPageNum((prevPageNum) => ++prevPageNum)}
-          blockName="main-page"
-          isLoaded={isLoaded}
-        />
+          <div className="schools search-entities-container__schools">
+            {schoolEntities.map((school) => (
+              <SchoolCard school={school} blockName="schools" />
+            ))}
+          </div>
+
+          <LoadMoreEntities
+            onClick={loadNextSchoolPage}
+            blockName="search-entities-container"
+            isLoaded={isSchoolsLoaded}
+          />
+        </div>
+      ) : (
+        ""
+      )}
+
+      {articleEntities.length > 0 ? (
+        <div className="search-entities-container main-page__search-entities-container search-entities-container_articles">
+          <div className="search-entities-container__title">Статьи</div>
+
+          <ArticlesContainer
+            articles={articleEntities}
+            blockName="search-entities-container"
+          />
+          {articleEntities ? (
+            <LoadMoreEntities
+              onClick={loadNextArticlesPage}
+              blockName="search-entities-container"
+              isLoaded={isArticlesLoaded}
+            />
+          ) : (
+            ""
+          )}
+        </div>
       ) : (
         ""
       )}

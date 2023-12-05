@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { config } from "../../../config";
 import Preloader from "../../Preloader/Preloader";
 import ShareContainer from "../../ShareContainer/ShareContainer";
+import BluredImageBackgroud from "../../BluredImageBackground/BluredImageBackgroud";
 
 const ArticlePage = () => {
   const { articleId } = useParams();
@@ -57,13 +58,9 @@ const ArticlePage = () => {
         />
 
         {article.previewImagePath ? (
-          <div
-            className="article-container__heading-background-image"
-            style={{
-              backgroundImage: `url(${
-                config.SERVER_URL + article.previewImagePath
-              })`,
-            }}
+          <BluredImageBackgroud
+            blockName="article-container"
+            imageUrl={config.SERVER_URL + article.previewImagePath}
           />
         ) : (
           ""
@@ -132,7 +129,11 @@ const ArticlePage = () => {
             location={location.toString()}
             title={articleFullTitle}
             blockName="article-container"
-            modificatorNames={article.previewImagePath ? ["bottom", "with-image"] : ["bottom", "no-image"]}
+            modificatorNames={
+              article.previewImagePath
+                ? ["bottom", "with-image"]
+                : ["bottom", "no-image"]
+            }
           />
         </div>
       </div>
