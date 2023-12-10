@@ -5,16 +5,16 @@ import "./ArticleCard.css";
 import { useNavigate } from "react-router-dom";
 
 type ArticleCardProps = {
-  article: Article;
+  entity: Article;
   blockName: string;
 };
 
-const ArticleCard = ({ article, blockName }: ArticleCardProps) => {
+const ArticleCard = ({ entity, blockName }: ArticleCardProps) => {
   const navigate = useNavigate();
 
-  let artilcePreviewImage = config.SERVER_URL + article.previewImagePath;
+  let artilcePreviewImage = config.SERVER_URL + entity.previewImagePath;
 
-  let date = new Date(article.createdUTC + " GMT");
+  let date = new Date(entity.createdUTC + " GMT");
 
   let dateString = date.toLocaleDateString("ru-RU", {
     year: "numeric",
@@ -22,7 +22,7 @@ const ArticleCard = ({ article, blockName }: ArticleCardProps) => {
     day: "numeric",
   });
 
-  let articleURL = `/article/${article.id}`;
+  let articleURL = `/article/${entity.id}`;
 
   return (
     <div
@@ -30,12 +30,12 @@ const ArticleCard = ({ article, blockName }: ArticleCardProps) => {
       onClick={() => navigate(articleURL)}
     >
       <div className="article-card__header">
-        <AuthorTag blockName="article-card" user={article.user} />
+        <AuthorTag blockName="article-card" user={entity.user} />
 
         <span className="article-card__date">{dateString}</span>
       </div>
 
-      {article.previewImagePath ? (
+      {entity.previewImagePath ? (
         <img
           className="article-card__preview-image"
           src={artilcePreviewImage}
@@ -45,9 +45,9 @@ const ArticleCard = ({ article, blockName }: ArticleCardProps) => {
       )}
 
       <div className="article-card__content">
-        <div className="article-card__title">{article.title}</div>
-        {article.category ? (
-          <CategoryTag category={article.category} blockName="article-card" isFilled={false} modificatorName={null} />
+        <div className="article-card__title">{entity.title}</div>
+        {entity.category ? (
+          <CategoryTag category={entity.category} blockName="article-card" isFilled={false} modificatorName={null} />
         ) : (
           ""
         )}

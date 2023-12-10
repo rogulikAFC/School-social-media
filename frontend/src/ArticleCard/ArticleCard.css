@@ -33,6 +33,7 @@
 
 .article-card__preview-image {
   height: 256px;
+  max-width: 100%;
   object-fit: cover;
 }
 

@@ -58,8 +58,6 @@
     flex-direction: column;
     align-items: center;
     max-width: 100%;
-    /* width: auto; */
-    /* grid-template-area; */
   }
 
   .school-info-container__info-block {

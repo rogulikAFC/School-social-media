@@ -5,19 +5,19 @@ import "./SchoolCard.css"
 
 type SchoolCardProps = {
   blockName: string;
-  school: School;
+  entity: School;
 };
 
-const SchoolCard = ({ blockName, school }: SchoolCardProps) => {
+const SchoolCard = ({ blockName, entity }: SchoolCardProps) => {
   const navigate = useNavigate();
 
   return (
-    <button className={`school-card ${blockName}__school-card`} onClick={() => navigate(`/school/${school.id}`)} >
-      <ProfileImage blockName="school-card" imageSource={`${config.SERVER_URL}${school.imagePath}`} />
+    <button className={`school-card ${blockName}__school-card`} onClick={() => navigate(`/school/${entity.id}`)} >
+      <ProfileImage blockName="school-card" imageSource={`${config.SERVER_URL}${entity.imagePath}`} />
 
       <div className="school-card__info-block">
-        <div className="school-card__title">{school.name}</div>
-        <div className="school-card__address">{school.fullAddress}</div>
+        <div className="school-card__title">{entity.name}</div>
+        <div className="school-card__address">{entity.fullAddress}</div>
       </div>
     </button>
   );
