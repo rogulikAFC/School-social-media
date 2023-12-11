@@ -30,14 +30,14 @@
   text-align: left;
 }
 
-.school-card__title {
+/* .school-card__title {
   font-size: 24px;
   font-weight: 600;
   line-height: 32px;
   letter-spacing: 0em;
   text-align: left;
   transition: 0.15s all;
-}
+} */
 
 .school-card__address {
   font-size: 14px;
@@ -56,7 +56,7 @@
     row-gap: 5px;
   }
 
-  .school-card__title,
+  /* .school-card__title, */
   .school-card__address {
     font-size: 14px;
     line-height: 16px;
@@ -64,9 +64,9 @@
     text-align: left;
   }
 
-  .school-card__title {
+  /* .school-card__title {
     font-weight: 700;
-  }
+  } */
 
   .school-card__address {
     font-weight: 500;

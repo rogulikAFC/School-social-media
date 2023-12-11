@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 import { config } from "../../../config";
 import Preloader from "../../Preloader/Preloader";
 import ShareContainer from "../../ShareContainer/ShareContainer";
-import BluredImageBackgroud from "../../BluredImageBackground/BluredImageBackgroud";
+import BluredImageBackground from "../../BluredImageBackground/BluredImageBackground";
+import TitleForCards from "../../Title/TitleForCards";
 
 const ArticlePage = () => {
   const { articleId } = useParams();
@@ -43,99 +44,44 @@ const ArticlePage = () => {
 
   return article ? (
     <div className="article-container main-page__article-container">
-      <div
-        className={`article-container__heading ${
-          article.previewImagePath ? "" : "article-container__heading_no-image"
-        }`}
-      >
-        <ShareContainer
-          location={location.toString()}
-          title={articleFullTitle}
-          blockName="article-container"
-          modificatorNames={
-            article.previewImagePath ? ["top"] : ["top", "no-image"]
-          }
+      <div className="article-container__article-info article-info">
+        <BluredImageBackground
+          blockName="article-info"
+          imageUrl={config.SERVER_URL + article.previewImagePath}
         />
 
-        {article.previewImagePath ? (
-          <BluredImageBackgroud
-            blockName="article-container"
-            imageUrl={config.SERVER_URL + article.previewImagePath}
-          />
-        ) : (
-          ""
-        )}
-        {article.previewImagePath ? (
-          <div className="article-container__left">
+        <figure className="article-info__image">
+          <img src={config.SERVER_URL + article.previewImagePath} />
+
+          <figcaption>
             <CategoryTag
-              blockName="article-container"
+              blockName="article-info"
               category={article!.category}
               isFilled={true}
-              modificatorName={null}
             />
-            <img
-              src={config.SERVER_URL + article.previewImagePath}
-              alt=""
-              className="article-container__preview-img"
-            />
-          </div>
-        ) : (
-          ""
-        )}
+          </figcaption>
+        </figure>
 
-        {article.previewImagePath ? (
-          ""
-        ) : (
-          <CategoryTag
-            blockName="article-container"
-            category={article!.category}
-            isFilled={true}
-            modificatorName="no-image"
-          />
-        )}
-
-        <div
-          className={`article-container__right ${
-            article.previewImagePath ? "" : "article-container__right_no-image"
-          }`}
-        >
-          <div
-            className={`article-container__additional-info ${
-              article.previewImagePath
-                ? ""
-                : "article-container__additional-info_no-image"
-            }`}
-          >
-            <AuthorTag blockName="article-container" user={article!.user} />
-            <span className="article-container__views">
+        <div className="article-info__title-with-additional-info">
+          <div className="article-info__additional-info">
+            <AuthorTag blockName="article-info" user={article!.user} />
+            <span className="article-info__views">
               {article.viewsCount} просмотров
             </span>
-            <span className="article-container__date">
+            <span className="article-info__date">
               {dateString} в {timeString}
             </span>
           </div>
-
-          <div
-            className={`article-container__title ${
-              article.previewImagePath
-                ? ""
-                : "article-container__title_no-image"
-            }`}
-          >
+          <TitleForCards blockName="article-info">
             {article.title}
-          </div>
-
-          <ShareContainer
-            location={location.toString()}
-            title={articleFullTitle}
-            blockName="article-container"
-            modificatorNames={
-              article.previewImagePath
-                ? ["bottom", "with-image"]
-                : ["bottom", "no-image"]
-            }
-          />
+          </TitleForCards>
         </div>
+
+        <ShareContainer
+          location={location.toString()}
+          title={articleFullTitle}
+          blockName="article-info"
+        />
       </div>
 
       <div

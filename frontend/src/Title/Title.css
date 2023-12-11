@@ -4,3 +4,22 @@
   line-height: 48px;
   letter-spacing: 0em; 
 }
+
+.title_for-cards {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 32px;
+  letter-spacing: 0em;
+  text-align: left;
+  transition: 0.15s all;
+}
+
+@media screen and (max-width: 480px) {
+  .title_for-cards {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 16px;
+    letter-spacing: 0em;
+    text-align: left;
+  }
+}

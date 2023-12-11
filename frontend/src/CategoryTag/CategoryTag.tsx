@@ -7,12 +7,14 @@ type CategoryProps = {
   modificatorName: string | null;
 };
 
+type CategoryPropsWithModificator = PartialBy<CategoryProps, "modificatorName">
+
 const CategoryTag = ({
   category,
   blockName,
   isFilled,
   modificatorName,
-}: CategoryProps) => {
+}: CategoryPropsWithModificator) => {
   return (
     <a
       className={`category-tag ${blockName}__category-tag ${

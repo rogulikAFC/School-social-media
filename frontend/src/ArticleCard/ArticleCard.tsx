@@ -1,6 +1,7 @@
 import { config } from "../../config.ts";
 import AuthorTag from "../AuthorTag/AuthorTag.tsx";
 import CategoryTag from "../CategoryTag/CategoryTag.tsx";
+import TitleForCards from "../Title/TitleForCards.tsx";
 import "./ArticleCard.css";
 import { useNavigate } from "react-router-dom";
 
@@ -45,7 +46,8 @@ const ArticleCard = ({ entity, blockName }: ArticleCardProps) => {
       )}
 
       <div className="article-card__content">
-        <div className="article-card__title">{entity.title}</div>
+        {/* <div className="article-card__title">{entity.title}</div> */}
+        <TitleForCards blockName="article-card">{entity.title}</TitleForCards>
         {entity.category ? (
           <CategoryTag category={entity.category} blockName="article-card" isFilled={false} modificatorName={null} />
         ) : (

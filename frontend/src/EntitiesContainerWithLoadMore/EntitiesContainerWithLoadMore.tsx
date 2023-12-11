@@ -58,7 +58,7 @@ function EntitiesContainerWithLoadMore<T>({
   return (
     entities.length > 0 && (
       <div
-        className={`entities-container-wrapper ${blockName}__entities-container-wrapper ${entitiesPluralName} ${blockName}__${entitiesPluralName}`}
+        className={`entities-container-wrapper ${blockName}__entities-container-wrapper`}
       >
         {Container<T>({
           entities: entities,

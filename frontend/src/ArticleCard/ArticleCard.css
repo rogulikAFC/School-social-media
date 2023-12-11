@@ -43,7 +43,7 @@
   padding: 16px;
 }
 
-.article-card__title {
+/* .article-card__title {
   font-size: 24px;
   font-weight: 600;
   line-height: 32px;
@@ -51,6 +51,10 @@
   text-align: left;
   margin-bottom: 32px;
   transition: 0.15s all;
+} */
+
+.article-card__title {
+  margin-bottom: 32px;
 }
 
 .article-card__category-tag {
@@ -63,12 +67,16 @@
     padding: 8px;
   }
 
-  .article-card__title {
+  /* .article-card__title {
     font-size: 14px;
     font-weight: 700;
     line-height: 16px;
     letter-spacing: 0em;
     text-align: left;
+    margin-bottom: 16px;
+  } */
+
+  .article-card__title {
     margin-bottom: 16px;
   }
 

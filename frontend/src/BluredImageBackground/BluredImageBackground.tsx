@@ -1,11 +1,11 @@
-import "./BluredImageBackgroud.css";
+import "./BluredImageBackground.css";
 
 type BluredImageBackgroudProps = {
   blockName: string;
   imageUrl: string;
 };
 
-const BluredImageBackgroud = ({
+const BluredImageBackground = ({
   imageUrl,
   blockName,
 }: BluredImageBackgroudProps) => {
@@ -19,4 +19,4 @@ const BluredImageBackgroud = ({
   );
 };
 
-export default BluredImageBackgroud;
+export default BluredImageBackground;

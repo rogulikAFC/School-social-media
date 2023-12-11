@@ -1,6 +1,6 @@
 import "./Title.css"
 
-type TitleProps = {
+export type TitleProps = {
   children: string;
   blockName: string;
 };

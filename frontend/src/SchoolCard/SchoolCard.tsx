@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { config } from "../../config";
 import ProfileImage from "../ProfileImage/ProfileImage";
 import "./SchoolCard.css"
+import TitleForCards from "../Title/TitleForCards";
 
 type SchoolCardProps = {
   blockName: string;
@@ -16,7 +17,8 @@ const SchoolCard = ({ blockName, entity }: SchoolCardProps) => {
       <ProfileImage blockName="school-card" imageSource={`${config.SERVER_URL}${entity.imagePath}`} />
 
       <div className="school-card__info-block">
-        <div className="school-card__title">{entity.name}</div>
+        {/* <div className="school-card__title">{entity.name}</div> */}
+        <TitleForCards blockName="school-card">{entity.name}</TitleForCards>
         <div className="school-card__address">{entity.fullAddress}</div>
       </div>
     </button>
