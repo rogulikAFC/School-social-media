@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SchoolSocialMediaServer.DbContexts;
@@ -11,9 +12,11 @@ using SchoolSocialMediaServer.DbContexts;
 namespace SchoolSocialMediaServer.Migrations
 {
     [DbContext(typeof(SchoolSocialMediaDbContext))]
-    partial class SchoolSocialMediaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231213165409_FileArticleEntityAdded")]
+    partial class FileArticleEntityAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -123,18 +126,15 @@ namespace SchoolSocialMediaServer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CategoryId")
+                    b.Property<Guid?>("CategoryId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTimeOffset>("CreatedUTC")
+                    b.Property<DateTimeOffset>("Created")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("FileName")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<Guid>("SchoolId")
-                        .HasColumnType("uuid");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -144,8 +144,6 @@ namespace SchoolSocialMediaServer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("SchoolId");
 
                     b.ToTable("FileArticles");
                 });
@@ -306,21 +304,9 @@ namespace SchoolSocialMediaServer.Migrations
 
             modelBuilder.Entity("SchoolSocialMediaServer.Entities.FileArticle", b =>
                 {
-                    b.HasOne("SchoolSocialMediaServer.Entities.Category", "Category")
+                    b.HasOne("SchoolSocialMediaServer.Entities.Category", null)
                         .WithMany("Files")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SchoolSocialMediaServer.Entities.School", "School")
-                        .WithMany()
-                        .HasForeignKey("SchoolId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-
-                    b.Navigation("School");
+                        .HasForeignKey("CategoryId");
                 });
 
             modelBuilder.Entity("SchoolSocialMediaServer.Entities.Report", b =>

@@ -15,11 +15,6 @@ namespace SchoolSocialMediaServer.Entities
 
         public ICollection<Article> Articles { get; } = new List<Article>();
 
-        public Category() { }
-
-        public Category(string name)
-        {
-            Name = name;
-        }
+        public ICollection<FileArticle> FileArticles { get; } = new List<FileArticle>();
     }
 }

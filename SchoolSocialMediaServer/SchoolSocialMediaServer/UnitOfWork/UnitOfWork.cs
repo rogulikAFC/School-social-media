@@ -17,6 +17,7 @@ namespace SchoolSocialMediaServer.Repositories
             ArticleRepository = new ArticleRepository(_socialMediaDbContext);
             UserRepository = new UserRepository(_socialMediaDbContext);
             ReportRepository = new ReportRepository(_socialMediaDbContext);
+            FileArticleRepository = new FileArticleRepository(_socialMediaDbContext);
         }
 
         public ISchoolRepository SchoolRepository { get; }
@@ -24,6 +25,7 @@ namespace SchoolSocialMediaServer.Repositories
         public IArticleRepository ArticleRepository { get; }
         public IUserRepository UserRepository { get; }
         public IReportRepository ReportRepository { get; }
+        public IFileArticleRepository FileArticleRepository { get; }
 
         public async Task<bool> SaveChangesAsync()
         {

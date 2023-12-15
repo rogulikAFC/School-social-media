@@ -3,19 +3,3 @@
   flex-direction: column;
   row-gap: clamp(30px, 10vw, 100px);
 }
-
-.entities-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 25px 3vw 0 3vw;
-  row-gap: clamp(15px, 5vw, 56px);
-}
-
-.articles-wrapper__entities-container,
-.school-wrapper__entities-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-

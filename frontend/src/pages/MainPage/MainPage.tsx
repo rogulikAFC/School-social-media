@@ -4,13 +4,11 @@ import EntitiesContainer from "../../EntitiesContainer/EntitiesContainer";
 
 const MainPage = () => {
   return (
-    <>
-      <EntitiesContainerWithLoadMore
-        blockName="main-page"
-        Container={EntitiesContainer}
-        entitiesPluralName="articles"
-      />
-    </>
+    <EntitiesContainerWithLoadMore
+      blockName="main-page"
+      Container={EntitiesContainer}
+      entitiesPluralName="articles"
+    />
   );
 };
 

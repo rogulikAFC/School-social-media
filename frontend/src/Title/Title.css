@@ -2,7 +2,7 @@
   font-size: 36px;
   font-weight: 600;
   line-height: 48px;
-  letter-spacing: 0em; 
+  letter-spacing: 0em;
 }
 
 .title_for-cards {
@@ -21,5 +21,11 @@
     line-height: 16px;
     letter-spacing: 0em;
     text-align: left;
+  }
+
+  .title_large {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 32px;
   }
 }

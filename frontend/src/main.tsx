@@ -7,6 +7,7 @@ import MainPage from "./pages/MainPage/MainPage";
 import ArticlePage from "./pages/ArticlePage/ArticlePage";
 import SearchPage from "./pages/SearchPage/SearchPage";
 import SchoolPage from "./pages/SchoolPage/SchoolPage";
+import ArticleCategoryPage from "./pages/ArticlesCategoryPage/ArticleCategoryPage";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: "school/:schoolId",
         element: <SchoolPage />
+      },
+      {
+        path: "school/:schoolId/category/:categoryId/articles",
+        element: <ArticleCategoryPage />
       }
     ],
   },

@@ -52,7 +52,7 @@ function EntitiesContainerWithLoadMore<T>({
   const { entities, isLoaded, loadNextPage } = useFetchingWithPagination<T>({
     pageSize: 4,
     relativeUrlWithoutParams: getRelativeUrl(entitiesPluralName),
-    searchParams: searchString ? [`query=${searchString}`] : [],
+    searchParams: searchString,
   });
 
   return (

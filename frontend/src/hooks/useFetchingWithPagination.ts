@@ -3,7 +3,7 @@ import { config } from "../../config";
 
 type FetchingWithPaginationProps = {
   pageSize: number;
-  searchParams: string[];
+  searchParams: string;
   relativeUrlWithoutParams: string;
 };
 
@@ -21,7 +21,7 @@ export type UseFetchingWithPaginationResult<T> = {
 const useFetchingWithPagination = <T>({
   pageSize,
   searchParams,
-  relativeUrlWithoutParams
+  relativeUrlWithoutParams,
 }: FetchingWithPaginationPropWithOptionals): UseFetchingWithPaginationResult<T> => {
   const [entities, setEntities] = useState<T[]>([]);
   const [pageNum, setPageNum] = useState<number>(1);
@@ -40,7 +40,7 @@ const useFetchingWithPagination = <T>({
         `${
           config.SERVER_URL
         }${relativeUrlWithoutParams}?pageNum=${pageNum}&pageSize=${pageSize}&${
-          searchParams ? searchParams.join("&") : ""
+          searchParams ? searchParams : ""
         }`
       );
 

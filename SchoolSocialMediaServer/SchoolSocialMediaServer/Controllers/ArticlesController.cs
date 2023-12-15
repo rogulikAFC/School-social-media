@@ -183,8 +183,6 @@ namespace SchoolSocialMediaServer.Controllers
             var articlePreviewImagesPath = Path.Combine(
                 projectDirectory, Article.ImageFilesDirectory);
 
-            Console.WriteLine(articlePreviewImagesPath);
-
             var filePath = new PhysicalFileProvider(articlePreviewImagesPath).Root + imageFileName;
 
             var fileStream = System.IO.File.Create(filePath);
@@ -232,7 +230,7 @@ namespace SchoolSocialMediaServer.Controllers
 
 
             var imagePath = Path.Combine(
-                projectDirectory, article.PreviewImagePath);
+                projectDirectory, "wwwroot", article.PreviewImagePath);
 
             System.IO.File.Delete(imagePath);
 
