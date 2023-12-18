@@ -14,13 +14,14 @@ function EntitiesContainer<T>({
   entitiesPluralName,
   blockName,
   EntityComponent,
+  ...props
 }: EntitiesContainerProps<T>) {
   return entities ? (
     <div
       className={`entities-container ${blockName}__entity-container ${entitiesPluralName} ${blockName}__${entitiesPluralName}`}
     >
       {entities.map((entity) => (
-        <EntityComponent entity={entity} blockName="entities-container" key={Math.random()} />
+        <EntityComponent entity={entity} blockName="entities-container" key={Math.random()} {...props} />
       ))}
     </div>
   ) : (

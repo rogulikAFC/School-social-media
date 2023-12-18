@@ -5,6 +5,7 @@ import useFetchingWithPagination from "../hooks/useFetchingWithPagination";
 import { EntitiesContainerProps } from "../EntitiesContainer/EntitiesContainer";
 import SchoolCard from "../SchoolCard/SchoolCard";
 import ArticleCard from "../ArticleCard/ArticleCard";
+import FileArticleCard from "../FileArticleCard/FileArticleCard";
 
 type EntitiesContainerWithLoadMoreProps = {
   Container: <T>({
@@ -29,6 +30,8 @@ const getRelativeUrl = (entitiesPluralName: string) => {
       return "api/Articles";
     case "schools":
       return "api/Schools";
+    case "file_articles":
+      return "api/FileArticles";
     default:
       return "";
   }
@@ -40,6 +43,8 @@ const getEntityComponentType = (entitiesPluralName: string) => {
       return ArticleCard;
     case "schools":
       return SchoolCard;
+    case "file_articles":
+      return FileArticleCard;
   }
 };
 

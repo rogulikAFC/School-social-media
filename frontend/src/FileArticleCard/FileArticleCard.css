@@ -1,0 +1,18 @@
+.file-article {
+  width: 368px;
+  padding: 24px;
+  background: #fff;
+  border-radius: 10px;
+  color: black;
+  text-decoration: none;
+}
+
+@media screen and (max-width: 769px) {
+  .file-article {
+    width: 100%;
+  }
+
+  .file-articles-category-page__entity-container {
+    gap: 12px !important;
+  }
+}

@@ -8,6 +8,8 @@ import ArticlePage from "./pages/ArticlePage/ArticlePage";
 import SearchPage from "./pages/SearchPage/SearchPage";
 import SchoolPage from "./pages/SchoolPage/SchoolPage";
 import ArticleCategoryPage from "./pages/ArticlesCategoryPage/ArticleCategoryPage";
+import FileArticleCard from "./FileArticleCard/FileArticleCard";
+import FileArticlesCategoryPage from "./pages/FileArticlesCategoryPage/FileArticlesCategoryPage";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: "school/:schoolId/category/:categoryId/articles",
         element: <ArticleCategoryPage />
+      },
+      {
+        path: "school/:schoolId/category/:categoryId/documents",
+        element: <FileArticlesCategoryPage />
       }
     ],
   },

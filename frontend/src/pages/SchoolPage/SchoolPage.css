@@ -42,6 +42,19 @@
   letter-spacing: 0em;
 }
 
+.categories-wrapper {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  border-radius: 13px;
+  margin: 25px 3vw 0 3vw;
+  padding: 16px;
+  gap: 16px;
+  max-width: max-content;
+}
+
 @media screen and (max-width: 480px) {
   .school-info-container__title {
     font-size: 18px;

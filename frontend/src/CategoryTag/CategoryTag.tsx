@@ -1,29 +1,39 @@
+import WithNavigationToCategoryPage from "../WithNavigationToCategory/WithNavigationToCategoryPage";
 import "./CategoryTag.css";
 
 type CategoryProps = {
-  category: Category;
+  school: School;
+  entity: Category;
+  type: string;
   blockName: string;
   isFilled: boolean;
   modificatorName: string | null;
+  newMechanic: boolean;
 };
 
-type CategoryPropsWithModificator = PartialBy<CategoryProps, "modificatorName">
+type CategoryPropsWithModificator = PartialBy<CategoryProps, "modificatorName">;
+type CategoryPropsWithModificatorAndMechanicType = PartialBy<CategoryPropsWithModificator, "newMechanic">;
 
 const CategoryTag = ({
-  category,
+  entity: category,
+  school,
+  type,
   blockName,
   isFilled,
   modificatorName,
-}: CategoryPropsWithModificator) => {
+  newMechanic = true
+}: CategoryPropsWithModificatorAndMechanicType) => {
   return (
-    <a
-      className={`category-tag ${blockName}__category-tag ${
-        isFilled ? "category-tag_filled" : ""
-      } ${modificatorName ? `category-tag_${modificatorName}` : ""}`}
-      key={category.id}
-    >
-      {category.name}
-    </a>
+    <WithNavigationToCategoryPage newMechanic={newMechanic} blockName={blockName} category={category} school={school} type={type}>
+      <a
+        className={`category-tag ${blockName}__category-tag ${
+          isFilled ? "category-tag_filled" : ""
+        } ${modificatorName ? `category-tag_${modificatorName}` : ""}`}
+        key={category.id}
+      >
+        {category.name}
+      </a>
+    </WithNavigationToCategoryPage>
   );
 };
 

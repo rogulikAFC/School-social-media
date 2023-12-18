@@ -8,6 +8,7 @@ import Preloader from "../../Preloader/Preloader";
 import ShareContainer from "../../ShareContainer/ShareContainer";
 import BluredImageBackground from "../../BluredImageBackground/BluredImageBackground";
 import TitleForCards from "../../Title/TitleForCards";
+import { CategoryTypes } from "../../WithNavigationToCategory/WithNavigationToCategoryPage";
 
 const ArticlePage = () => {
   const { articleId } = useParams();
@@ -56,8 +57,10 @@ const ArticlePage = () => {
           <figcaption>
             <CategoryTag
               blockName="article-info"
-              category={article!.category}
+              school={article!.school}
+              entity={article!.category}
               isFilled={true}
+              type={CategoryTypes.Articles}
             />
           </figcaption>
         </figure>

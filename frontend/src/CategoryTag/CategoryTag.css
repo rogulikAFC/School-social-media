@@ -12,6 +12,10 @@
   padding: 4px 24px;
 }
 
+.category-tag:hover {
+  cursor: pointer;
+}
+
 .category-tag_filled {
   color: white;
   background: #779cff;
