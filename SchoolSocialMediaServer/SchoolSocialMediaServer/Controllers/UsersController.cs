@@ -228,5 +228,25 @@ namespace SchoolSocialMediaServer.Controllers
 
             return NoContent();
         }
+
+        [HttpPost("{id}/sign_in")]
+        public async Task<ActionResult> SignInUser(
+            Guid id, [FromBody] string password)
+        {
+            var user = await _unitOfWork.UserRepository
+                .GetByIdAsync(id);
+
+            if (user == null)
+            {
+                return NotFound(nameof(id));
+            };
+
+            if (!_unitOfWork.UserRepository.SignInUser(user, password))
+            {
+                return Unauthorized(nameof(password));
+            };
+
+            return NoContent();
+        }
     }
 }

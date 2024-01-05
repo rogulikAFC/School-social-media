@@ -15,13 +15,13 @@ namespace SchoolSocialMediaServer.Entities
 
         public string FileName { get; set; } = null!;
 
-        public static string FilesDirectory { get; } = "Files/";
+        public static string FilesDirectory { get; } = "wwwroot/Files/";
 
         public string FilePath
         {
             get
             {
-                return FilesDirectory + FileName;
+                return "Files/" + FileName;
             }
         }
 

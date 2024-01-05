@@ -1,0 +1,18 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 30px;
+  max-width: 600px;
+}
+
+.form__submit-button {
+  padding: 4px 24px;
+  border-radius: 50px;
+  border: none;
+  background: #779CFF;
+  text-decoration: none;
+  font-size: 15px;
+  line-height: 24px;
+  font-weight: 400;
+  color: #fff;
+}

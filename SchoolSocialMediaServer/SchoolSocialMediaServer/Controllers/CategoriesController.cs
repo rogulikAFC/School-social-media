@@ -57,6 +57,25 @@ namespace SchoolSocialMediaServer.Controllers
             return categoryDto;
         }
 
+        [HttpGet("school/{schoolId}/has_content/{contentType}")]
+        public async Task<ActionResult<CategoryWithoutArticlesDto>> GetCategoryByContentType(
+            Guid schoolId, string contentType)
+        {
+            var categories = await _unitOfWork.CategoryRepository
+                .ListCategoriesByHasContentTypeAsync(schoolId, contentType);
+
+            var categoryDtos = new List<CategoryWithoutArticlesDto>();
+
+            foreach (var category in categories)
+            {
+                var categoryDto = _mapper.Map<CategoryWithoutArticlesDto>(category);
+
+                categoryDtos.Add(categoryDto);
+            }
+
+            return Ok(categoryDtos);
+        }
+
         [HttpPost]
         public async Task<ActionResult<CategoryWithoutArticlesDto>> PostCategory(
             CategoryForCreateDto categoryForCreate)

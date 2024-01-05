@@ -107,8 +107,10 @@ namespace SchoolSocialMediaServer.Controllers
             }
 
             var fileDirectoryPath = Path.Combine(projectDirectory, FileArticle.FilesDirectory);
+            Console.WriteLine(fileDirectoryPath);
 
             var filePath = new PhysicalFileProvider(fileDirectoryPath).Root + fileName;
+
 
             var fileStream = System.IO.File.Create(filePath);
 

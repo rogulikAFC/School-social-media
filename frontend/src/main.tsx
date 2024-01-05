@@ -10,6 +10,7 @@ import SchoolPage from "./pages/SchoolPage/SchoolPage";
 import ArticleCategoryPage from "./pages/ArticlesCategoryPage/ArticleCategoryPage";
 import FileArticleCard from "./FileArticleCard/FileArticleCard";
 import FileArticlesCategoryPage from "./pages/FileArticlesCategoryPage/FileArticlesCategoryPage";
+import CreateSchoolPage from "./pages/CreateSchoolPage/CreateSchoolPage";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
       {
         path: "school/:schoolId/category/:categoryId/documents",
         element: <FileArticlesCategoryPage />
+      },
+      {
+        path: "school/create",
+        element: <CreateSchoolPage />
       }
     ],
   },

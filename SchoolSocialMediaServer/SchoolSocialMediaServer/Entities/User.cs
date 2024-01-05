@@ -15,7 +15,10 @@ namespace SchoolSocialMediaServer.Entities
 
         [Required]
         [EmailAddress]
-        public string Email { get; set; } = string.Empty;
+        public string Email { get; set; } = null!;
+
+        [Required]
+        public string Password { get; set; } = null!;
 
         public int ProfileViewCount { get; set; }
         

@@ -62,5 +62,10 @@ namespace SchoolSocialMediaServer.UnitOfWork
                 .Skip((pageNum - 1) * pageSize).Take(pageSize)
                 .ToListAsync();
         }
+
+        public bool SignInUser(User user, string password)
+        {
+            return BCrypt.Net.BCrypt.Verify(password, user.Password);
+        }
     }
 }

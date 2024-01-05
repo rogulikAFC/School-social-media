@@ -10,5 +10,6 @@ namespace SchoolSocialMediaServer.UnitOfWork
         void Delete(User user);
         void AddAdminStatus(User user, School school);
         Task<bool> IsAdminAsync(Guid userId, Guid schoolId);
+        bool SignInUser(User user, string password);
     }
 }
