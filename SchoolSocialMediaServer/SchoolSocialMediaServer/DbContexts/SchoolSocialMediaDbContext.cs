@@ -25,6 +25,10 @@ namespace SchoolSocialMediaServer.DbContexts
                 .WithOne(c => c.Category)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+
             base.OnModelCreating(modelBuilder);
         }
     }

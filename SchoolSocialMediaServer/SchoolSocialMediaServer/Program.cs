@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Server.IISIntegration;
 using Microsoft.EntityFrameworkCore;
 using SchoolSocialMediaServer.DbContexts;
 using SchoolSocialMediaServer.Repositories;
-
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+using System.ComponentModel;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,17 +14,20 @@ builder.Logging.AddConsole();
 
 // Add services to the container.
 
+builder.Services.AddAuthentication(IISDefaults.AuthenticationScheme);
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
+    options.AddDefaultPolicy(
         policy =>
         {
             policy.WithOrigins("http://localhost:5173")
                 .AllowAnyMethod()
-                .AllowAnyHeader();
+                .AllowAnyHeader()
+                .AllowCredentials();
         });
 });
-
+    
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -48,7 +53,9 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
-app.UseCors(MyAllowSpecificOrigins);
+// app.UseAuthentication(IISDefaults.AuthenticationScheme
+
+app.UseCors();
 
 app.UseAuthorization();
 

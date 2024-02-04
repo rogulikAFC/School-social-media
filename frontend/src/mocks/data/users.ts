@@ -1,0 +1,67 @@
+export const users: User[] = [
+  {
+    id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    name: "string",
+    profileViewCount: 0,
+    imagePath: "string",
+    school: {
+      id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      fullAddress: "string",
+      name: "string",
+      imagePath: "string",
+      nameWithAddress: "string",
+    },
+  },
+  {
+    id: "eafc72dc-3de2-41e5-a783-104e6521145a",
+    name: "string",
+    profileViewCount: 0,
+    imagePath: "string",
+    school: {
+      id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      fullAddress: "string",
+      name: "string",
+      imagePath: "string",
+      nameWithAddress: "string",
+    },
+  },
+  {
+    id: "18d5a66e-5e40-43fa-8372-b5d42038705a",
+    name: "string",
+    profileViewCount: 0,
+    imagePath: "string",
+    school: {
+      id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      fullAddress: "string",
+      name: "string",
+      imagePath: "string",
+      nameWithAddress: "string",
+    },
+  },
+  {
+    id: "1e251033-6290-4856-9c40-543a74b054f0",
+    name: "string",
+    profileViewCount: 0,
+    imagePath: "string",
+    school: {
+      id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      fullAddress: "string",
+      name: "string",
+      imagePath: "string",
+      nameWithAddress: "string",
+    },
+  },
+  {
+    id: "cbfd07d7-fe87-4e0c-9332-ed5050867600",
+    name: "string",
+    profileViewCount: 0,
+    imagePath: "string",
+    school: {
+      id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      fullAddress: "string",
+      name: "string",
+      imagePath: "string",
+      nameWithAddress: "string",
+    },
+  },
+];

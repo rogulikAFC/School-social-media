@@ -16,13 +16,8 @@ type EntitiesContainerWithLoadMoreProps = {
   }: EntitiesContainerProps<T>) => ReactElement;
   blockName: string;
   entitiesPluralName: string;
-  searchString: string;
+  searchString?: string;
 };
-
-type EntitiesContainerWithLoadMorePropsWithSearch = PartialBy<
-  EntitiesContainerWithLoadMoreProps,
-  "searchString"
->;
 
 const getRelativeUrl = (entitiesPluralName: string) => {
   switch (entitiesPluralName.toLowerCase()) {
@@ -53,7 +48,7 @@ function EntitiesContainerWithLoadMore<T>({
   blockName,
   entitiesPluralName,
   searchString,
-}: EntitiesContainerWithLoadMorePropsWithSearch) {
+}: EntitiesContainerWithLoadMoreProps) {
   const { entities, isLoaded, loadNextPage } = useFetchingWithPagination<T>({
     pageSize: 4,
     relativeUrlWithoutParams: getRelativeUrl(entitiesPluralName),

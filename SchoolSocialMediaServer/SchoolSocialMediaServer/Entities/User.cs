@@ -47,7 +47,7 @@ namespace SchoolSocialMediaServer.Entities
                     return null;
                 }
 
-                return "Images/UserImages/" + ImageFileName;
+                return "/Images/UserImages/" + ImageFileName;
             }
         }
 

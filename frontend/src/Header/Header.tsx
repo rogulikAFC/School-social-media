@@ -58,7 +58,7 @@ const Header = ({ blockName }: HeaderProps) => {
             position: searchContainerOpened ? "absolute" : "static",
           }}
         >
-          <button
+          <div
             className="mobile-menu__menu-button"
             onClick={() => setMobileMenuOpened((isOpened) => !isOpened)}
           >
@@ -72,7 +72,7 @@ const Header = ({ blockName }: HeaderProps) => {
               <div className="mobile-menu__background" />
               <div className="mobile-menu__content">{headerElements}</div>
             </div>
-          </button>
+          </div>
         </nav>
 
         <div

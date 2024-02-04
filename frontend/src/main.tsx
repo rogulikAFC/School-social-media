@@ -11,6 +11,8 @@ import ArticleCategoryPage from "./pages/ArticlesCategoryPage/ArticleCategoryPag
 import FileArticleCard from "./FileArticleCard/FileArticleCard";
 import FileArticlesCategoryPage from "./pages/FileArticlesCategoryPage/FileArticlesCategoryPage";
 import CreateSchoolPage from "./pages/CreateSchoolPage/CreateSchoolPage";
+import SignUpPage from "./pages/SignUpPage/SignUpPage";
+import UserContextProvider from "./contexts/UserContext";
 
 const router = createBrowserRouter([
   {
@@ -44,11 +46,17 @@ const router = createBrowserRouter([
       {
         path: "school/create",
         element: <CreateSchoolPage />
+      },
+      {
+        path: "sign_up",
+        element: <SignUpPage />
       }
     ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <RouterProvider router={router} />
+  <UserContextProvider>
+    <RouterProvider router={router} />
+  </UserContextProvider>
 );

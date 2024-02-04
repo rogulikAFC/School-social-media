@@ -229,16 +229,16 @@ namespace SchoolSocialMediaServer.Controllers
             return NoContent();
         }
 
-        [HttpPost("{id}/sign_in")]
+        [HttpPost("by_email/{email}/sign_in")]
         public async Task<ActionResult> SignInUser(
-            Guid id, [FromBody] string password)
+            string email, [FromBody] string password)
         {
             var user = await _unitOfWork.UserRepository
-                .GetByIdAsync(id);
+                .GetByEmailAsync(email);
 
             if (user == null)
             {
-                return NotFound(nameof(id));
+                return NotFound(nameof(email));
             };
 
             if (!_unitOfWork.UserRepository.SignInUser(user, password))
@@ -247,6 +247,22 @@ namespace SchoolSocialMediaServer.Controllers
             };
 
             return NoContent();
+        }
+
+        [HttpGet("by_email/{email}")]
+        public async Task<ActionResult<UserDto>> GetUserByEmail(string email)
+        {
+            var user = await _unitOfWork.UserRepository
+                .GetByEmailAsync(email);
+
+            if (user == null)
+            {
+                return NotFound(nameof(email));
+            }
+
+            var userDto = _mapper.Map<UserDto>(user);
+
+            return Ok(userDto);
         }
     }
 }

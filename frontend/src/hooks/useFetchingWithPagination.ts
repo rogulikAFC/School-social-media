@@ -3,67 +3,72 @@ import { config } from "../../config";
 
 type FetchingWithPaginationProps = {
   pageSize: number;
-  searchParams: string;
+  searchParams?: string;
   relativeUrlWithoutParams: string;
 };
-
-type FetchingWithPaginationPropWithOptionals = PartialBy<
-  FetchingWithPaginationProps,
-  "searchParams"
->;
 
 export type UseFetchingWithPaginationResult<T> = {
   entities: T[];
   loadNextPage: () => void;
   isLoaded: boolean;
+  isLastPage: boolean;
+  error: string | null;
 };
 
 const useFetchingWithPagination = <T>({
   pageSize,
   searchParams,
   relativeUrlWithoutParams,
-}: FetchingWithPaginationPropWithOptionals): UseFetchingWithPaginationResult<T> => {
+}: FetchingWithPaginationProps): UseFetchingWithPaginationResult<T> => {
+  if (pageSize < 0) throw new Error("Page size cannot be negative");
+  if (pageSize > 15) throw new Error("Page size cannot be greater than 15");
+
+  if (
+    relativeUrlWithoutParams.includes("://") ||
+    relativeUrlWithoutParams.startsWith("//")
+  )
+    throw new Error("relativeUrlWithoutParams must be relative");
+
+  if (relativeUrlWithoutParams.includes("?"))
+    throw new Error("relativeUrlWithoutParams must be without params");
+
   const [entities, setEntities] = useState<T[]>([]);
   const [pageNum, setPageNum] = useState<number>(1);
   const [isLastPage, setIsLastPage] = useState<boolean>(false);
   const [isLoaded, setIsLoaded] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const getEntities = async () => {
-      if (isLastPage) {
-        return;
-      }
+    (async () => {
+      if (isLastPage) return;
 
       setIsLoaded(false);
 
-      let response = await fetch(
-        `${
-          config.SERVER_URL
-        }${relativeUrlWithoutParams}?pageNum=${pageNum}&pageSize=${pageSize}&${
-          searchParams ? searchParams : ""
-        }`
-      );
+      let response;
 
-      let json = await response.json();
-
-      let entitiesFromJson: any[] = json;
-
-      if (entitiesFromJson.length < pageSize) {
-        setIsLastPage(true);
-      }
-
-      if (!entities) {
-        setEntities(entitiesFromJson);
+      try {
+        response = await fetch(
+          config.SERVER_URL +
+            `${relativeUrlWithoutParams}?pageNum=${pageNum}&pageSize=${pageSize}&${
+              searchParams ? searchParams : ""
+            }`
+        );
+      } catch (e) {
+        setError("Something went wrong");
 
         return;
       }
 
-      setEntities((prevEntities) => [...prevEntities, ...entitiesFromJson]);
+      let json: T[] = await response.json();
+
+      if (json.length < pageSize) setIsLastPage(true);
+
+      entities
+        ? setEntities((prevEntities) => [...prevEntities, ...json])
+        : setEntities(json);
 
       setIsLoaded(true);
-    };
-
-    getEntities();
+    })();
   }, [pageNum]);
 
   const loadNextPage = () => setPageNum((lastPageNum) => ++lastPageNum);
@@ -72,7 +77,9 @@ const useFetchingWithPagination = <T>({
     entities: entities,
     loadNextPage: loadNextPage,
     isLoaded: isLoaded,
-  };
+    isLastPage: isLastPage,
+    error: error,
+  } as UseFetchingWithPaginationResult<T>;
 };
 
 export default useFetchingWithPagination;

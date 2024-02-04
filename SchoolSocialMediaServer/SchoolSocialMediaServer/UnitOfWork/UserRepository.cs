@@ -44,6 +44,13 @@ namespace SchoolSocialMediaServer.UnitOfWork
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
 
+        public async Task<User?> GetByEmailAsync(string email)
+        {
+            return await _socialMediaDbContext.Users
+                .Include(u => u.School)
+                .FirstOrDefaultAsync(u => u.Email == email);
+        }
+
         public async Task<bool> IsAdminAsync(Guid userId, Guid schoolId)
         {
             return await _socialMediaDbContext.AdminStatuses

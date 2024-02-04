@@ -6,6 +6,7 @@ namespace SchoolSocialMediaServer.UnitOfWork
     {
         Task<IEnumerable<User>> ListAsync(int pageNum, int pageSize);
         Task<User?> GetByIdAsync(Guid id);
+        Task<User?> GetByEmailAsync(string email);
         void Add(User user);
         void Delete(User user);
         void AddAdminStatus(User user, School school);

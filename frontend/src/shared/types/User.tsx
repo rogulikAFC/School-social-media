@@ -10,9 +10,7 @@ type UserToSignUp = {
   name: string;
   schoolId: string | null;
   email: string;
+  password: string;
 };
 
-type UserToLogin = {
-  email: string;
-  password: string;
-}
+type UserToSignIn = Pick<UserToSignUp, "email" | "password">;
