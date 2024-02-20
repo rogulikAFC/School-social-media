@@ -1,0 +1,9 @@
+.form-errors {
+  display: flex;
+  flex-direction: column; 
+  row-gap: 5px;
+}
+
+.form__form-errors {
+  margin-top: 10px;
+}

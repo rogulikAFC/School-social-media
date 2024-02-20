@@ -3,7 +3,7 @@ import "../Field.css";
 import Cancel from "../../assets/CancelSearch.svg";
 import SearchImg from "../../assets/SearchIcon.svg";
 import { useEffect, useRef, useState } from "react";
-import { createSearchParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type SearchFieldProps = {
   blockName: string;

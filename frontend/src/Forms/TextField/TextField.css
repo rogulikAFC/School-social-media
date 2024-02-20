@@ -7,3 +7,11 @@
   font-size: 16px;
   outline: none;
 }
+
+.form__text-field {
+  width: 100%;
+}
+
+.form__text-field-wrapper {
+  min-width: 100%;
+}

@@ -1,0 +1,49 @@
+.image-field__field-container {
+  display: inline-flex;
+  align-items: center;
+  flex-direction: row;
+  color: #444;
+  padding: 5px 20px 5px 5px;
+  background: #fff;
+  border-radius: 50px;
+  border: 1px solid #555;
+}
+
+.image-field__file-upload-button {
+  display: block;
+  font-family: Inter;
+  padding: 5px 10px;
+  margin-right: 20px;
+  border: none;
+  background: #779CFF;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  border-radius: 50px;
+  user-select: none;
+}
+
+.image-field__modal-wrapper .modal__main {
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+  height: 100%;
+}
+
+.image-field__modal-wrapper .modal {
+  width: 75%;
+  height: 75%;
+}
+
+.image-field__crop-containers {
+  position: relative;
+  height: 100%;
+}
+
+.crop-container__crop {
+  border-radius: 15px;
+}
+
+.crop__crop-area {
+  border-radius: 50%;
+}

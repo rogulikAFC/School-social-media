@@ -7,12 +7,14 @@ import DynamicSelectField, {
 } from "../../Forms/DynamicSelectField/DynamicSelectField";
 import { useState } from "react";
 import { config } from "../../../config";
+import ImageUploadField from "../../Forms/ImageUploadField/ImageUploadField";
 
 type SchoolPageInput = {
   city: string;
   address: string;
   name: string;
   creatorUserId: string;
+  image: string;
 };
 
 const CreateSchoolPage = () => {
@@ -77,6 +79,8 @@ const CreateSchoolPage = () => {
           register={register("creatorUserId")}
           setValue={setValue}
         />
+
+        <ImageUploadField register={register("image")} setValue={setValue} blockName="form" />
 
         <input type="submit" className="form__submit-button" />
       </form>

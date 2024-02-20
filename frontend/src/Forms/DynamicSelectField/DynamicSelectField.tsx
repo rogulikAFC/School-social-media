@@ -1,11 +1,12 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./DynamicSelectField.css";
 
 type DynamicSelectFieldProps = {
   blockName: string;
   dataListName: string;
-  loadOptionsByQuery: (query: string) => Promise<any>;
-  options: DynamicSelectFieldOption[];
+  loadOptionsByQuery: (
+    query: string
+  ) => Promise<DynamicSelectFieldOption[] | undefined>;
   register: any;
   setValue: (name: any, optionData: string | null | undefined) => void;
 };
@@ -19,36 +20,69 @@ const DynamicSelectField = ({
   blockName,
   dataListName,
   loadOptionsByQuery,
-  options,
   register,
-  setValue
-}:
-DynamicSelectFieldProps) => {
+  setValue,
+}: DynamicSelectFieldProps) => {
   const datalistRef = useRef<HTMLDataListElement>(null);
+  const [options, setOptions] = useState<DynamicSelectFieldOption[]>([]);
+  const [query, setQuery] = useState<string>("");
 
-  const onFieldChange = async (data: React.ChangeEvent<HTMLInputElement>) => {
-    const value = data.target.value;
+  useEffect(() => {
+    (async () => {
+      const newOptions = await loadOptionsByQuery(query);
 
-    const selectedOption = datalistRef.current?.options.namedItem(value);
+      setOptions((prevOptions) =>
+        [...prevOptions, ...(newOptions ?? [])].reduce<
+          DynamicSelectFieldOption[]
+        >((acc, option) => {
+          // Filtering for unique options
+          if (
+            acc
+              .map((optionFromAcc) => optionFromAcc.value)
+              .includes(option.value)
+          )
+            return acc;
 
-    const optionData = selectedOption?.getAttribute("data");
+          return [...acc, option];
+        }, [])
+      );
+    })();
+  }, [query]);
 
-    setValue(register.name, optionData)
+  const handleFieldChange = async (
+    data: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const query = data.target.value;
 
-    await loadOptionsByQuery(value);
+    if (query === "") return;
+
+    setQuery(query);
+
+    const selectedOption = datalistRef.current?.options.namedItem(
+      query.replace(/ /g, "")
+    );
+
+    setValue(register.name, selectedOption?.getAttribute("data"));
   };
 
   return (
-    <div className={`${blockName}__select-field select-field`}>
+    <div
+      className={`${blockName}__select-field select-field ${blockName}__text-field-wrapper`}
+    >
       <input
         type="text"
         list={dataListName}
-        onChange={onFieldChange}
+        onChange={handleFieldChange}
+        className={`${blockName}__text-field text-field`}
       />
 
       <datalist id={dataListName} ref={datalistRef}>
         {options.map((option) => (
-          <option value={option.inner} name={option.inner} data={option.value}>
+          <option
+            id={option.inner.replace(/ /g, "")}
+            data={option.value}
+            key={option.value}
+          >
             {option.inner}
           </option>
         ))}
