@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 using SchoolSocialMediaServer.Entities;
 using SchoolSocialMediaServer.Models;
 

@@ -5,7 +5,9 @@ using Microsoft.Extensions.FileProviders;
 using SchoolSocialMediaServer.Entities;
 using SchoolSocialMediaServer.Models;
 using SchoolSocialMediaServer.Repositories;
+using SchoolSocialMediaServer.Services;
 using System.Net.WebSockets;
+using System.Runtime.CompilerServices;
 
 namespace SchoolSocialMediaServer.Controllers
 {
@@ -15,14 +17,18 @@ namespace SchoolSocialMediaServer.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IFileService _imagesService;
 
-        public SchoolsController(IUnitOfWork unitOfWork, IMapper mapper)
+        public SchoolsController(IUnitOfWork unitOfWork, IMapper mapper, IFileService imagesService)
         {
             _unitOfWork = unitOfWork
                 ?? throw new ArgumentNullException(nameof(unitOfWork));
 
             _mapper = mapper
                 ?? throw new ArgumentNullException(nameof(mapper));
+
+            _imagesService = imagesService
+                ?? throw new ArgumentNullException(nameof(imagesService));
         }
 
         [HttpGet]
@@ -47,7 +53,7 @@ namespace SchoolSocialMediaServer.Controllers
         public async Task<ActionResult<SchoolDto>> GetSchool(Guid id)
         {
             var schoolEntity = await _unitOfWork.SchoolRepository
-                .GetSchoolAsync(id);
+                .GetByIdAsync(id);
 
             if (schoolEntity == null)
             {
@@ -99,7 +105,7 @@ namespace SchoolSocialMediaServer.Controllers
             }
 
             var schoolEntity = await _unitOfWork.SchoolRepository
-                .GetSchoolAsync(id);
+                .GetByIdAsync(id);
 
             if (schoolEntity == null)
             {
@@ -122,7 +128,7 @@ namespace SchoolSocialMediaServer.Controllers
             }
             
             var schoolEntity = await _unitOfWork.SchoolRepository
-                .GetSchoolAsync(id);
+                .GetByIdAsync(id);
 
             if (schoolEntity == null)
             {
@@ -149,7 +155,7 @@ namespace SchoolSocialMediaServer.Controllers
             }
 
             var schoolEntity = await _unitOfWork.SchoolRepository
-                .GetSchoolAsync(id);
+                .GetByIdAsync(id);
 
             if (schoolEntity == null)
             {
@@ -158,31 +164,8 @@ namespace SchoolSocialMediaServer.Controllers
 
             var image = addImageDto.Image;
 
-            var fileExtension = Path.GetExtension(image.FileName);
-
-            var fileName = Guid.NewGuid().ToString() + fileExtension;
-
-            var projectDirectory = Directory.GetCurrentDirectory();
-
-            if (projectDirectory == null)
-            {
-                throw new Exception("Saving error");
-            }
-
-            var schoolImagesPath = Path.Combine(
-                projectDirectory, School.ImageFilesDirectory);
-
-            var filePath = new PhysicalFileProvider(schoolImagesPath).Root + fileName;
-
-            var fileStream = System.IO.File.Create(filePath);
-
-            await image.CopyToAsync(fileStream);
-
-            fileStream.Flush();
-
-            fileStream.Close();
-
-            schoolEntity.ImageFileName = fileName;
+            schoolEntity.ImageFileName = await _imagesService.UploadFile(
+                image, School.ImageFilesDirectory);
 
             await _unitOfWork.SaveChangesAsync();
 
@@ -203,7 +186,7 @@ namespace SchoolSocialMediaServer.Controllers
             }
 
             var schoolEntity = await _unitOfWork.SchoolRepository
-                .GetSchoolAsync(id);
+                .GetByIdAsync(id);
 
             if (schoolEntity == null)
             {
@@ -247,7 +230,7 @@ namespace SchoolSocialMediaServer.Controllers
             }
 
             var school = await _unitOfWork.SchoolRepository
-                .GetSchoolAsync(schoolId);
+                .GetByIdAsync(schoolId);
 
             if (school == null)
             {

@@ -231,6 +231,9 @@ namespace SchoolSocialMediaServer.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
                     b.HasIndex("SchoolId");
 
                     b.ToTable("Users");

@@ -27,7 +27,7 @@ namespace SchoolSocialMediaServer.Repositories
                 .ToListAsync();
         }
 
-        public async Task<School?> GetSchoolAsync(Guid? id)
+        public async Task<School?> GetByIdAsync(Guid? id)
         {
             return await _socialMediaDbContext.Schools
                 .FirstOrDefaultAsync(s => s.Id == id);

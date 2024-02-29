@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Server.IISIntegration;
 using Microsoft.EntityFrameworkCore;
 using SchoolSocialMediaServer.DbContexts;
 using SchoolSocialMediaServer.Repositories;
+using SchoolSocialMediaServer.Services;
 using System.ComponentModel;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,7 +29,9 @@ builder.Services.AddCors(options =>
         });
 });
     
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddNewtonsoftJson();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -39,6 +42,8 @@ builder.Services.AddDbContext<SchoolSocialMediaDbContext>(options =>
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddSingleton<IFileService, FileService>();
 
 var app = builder.Build();
 

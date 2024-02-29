@@ -21,7 +21,16 @@ namespace SchoolSocialMediaServer.Entities
         {
             get
             {
-                return "Files/" + FileName;
+                return Path.Combine("Files", FileName);
+            }
+        }
+
+        [NotMapped]
+        public string FilePathForServer
+        {
+            get
+            {
+                return Path.Combine(FilesDirectory, FileName);
             }
         }
 

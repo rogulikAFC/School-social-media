@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using SchoolSocialMediaServer.Entities;
 using SchoolSocialMediaServer.Models;
 using SchoolSocialMediaServer.Repositories;
+using SchoolSocialMediaServer.Services;
 
 namespace SchoolSocialMediaServer.Controllers
 {
@@ -16,14 +13,18 @@ namespace SchoolSocialMediaServer.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IFileService _fileService;
 
-        public FileArticlesController(IUnitOfWork unitOfWork, IMapper mapper)
+        public FileArticlesController(IUnitOfWork unitOfWork, IMapper mapper, IFileService fileService)
         {
             _unitOfWork = unitOfWork
                 ?? throw new ArgumentNullException(nameof(unitOfWork));
 
             _mapper = mapper
                 ?? throw new ArgumentNullException(nameof(mapper));
+
+            _fileService = fileService
+                ?? throw new ArgumentNullException(nameof(fileService));
         }
 
         [HttpGet]
@@ -53,13 +54,9 @@ namespace SchoolSocialMediaServer.Controllers
                 .GetByIdAsync(id);
 
             if (fileArticle == null)
-            {
                 return NotFound(nameof(id));
-            }
 
-            var fileArticleDto = _mapper.Map<FileArticleDto>(fileArticle);
-
-            return Ok(fileArticleDto);
+            return Ok(_mapper.Map<FileArticleDto>(fileArticle));
         }
 
         [Consumes("multipart/form-data")]
@@ -68,59 +65,28 @@ namespace SchoolSocialMediaServer.Controllers
             Guid adminId, [FromForm] FileArticleForCreateDto fileArticleForCreateDto)
         {
             var isSchoolExist = await _unitOfWork.SchoolRepository
-                .GetSchoolAsync(fileArticleForCreateDto.SchoolId) == null ? false : true;
+                .GetByIdAsync(fileArticleForCreateDto.SchoolId) != null;
 
             if (!isSchoolExist)
-            {
                 return NotFound(nameof(fileArticleForCreateDto.SchoolId));
-            }
 
             var isCategoryExist = await _unitOfWork.CategoryRepository
-                .GetAsync(fileArticleForCreateDto.CategoryId) == null ? false : true;
+                .GetAsync(fileArticleForCreateDto.CategoryId) != null;
 
             if (!isCategoryExist)
-            {
                 return NotFound(nameof(fileArticleForCreateDto.CategoryId));
-            }
 
             var isUserAdmin = await _unitOfWork.UserRepository.IsAdminAsync(
                 adminId, fileArticleForCreateDto.SchoolId);
 
             if (!isUserAdmin)
-            {
                 return Unauthorized(nameof(adminId));
-            }
 
             var fileArticle = _mapper.Map<FileArticle>(fileArticleForCreateDto);
 
             var file = fileArticleForCreateDto.File;
 
-            var fileExtension = Path.GetExtension(file.FileName);
-
-            var fileName = Guid.NewGuid().ToString() + fileExtension;
-
-            var projectDirectory = Directory.GetCurrentDirectory();
-
-            if (projectDirectory == null)
-            {
-                throw new Exception("Saving error");
-            }
-
-            var fileDirectoryPath = Path.Combine(projectDirectory, FileArticle.FilesDirectory);
-            Console.WriteLine(fileDirectoryPath);
-
-            var filePath = new PhysicalFileProvider(fileDirectoryPath).Root + fileName;
-
-
-            var fileStream = System.IO.File.Create(filePath);
-
-            await file.CopyToAsync(fileStream);
-
-            fileStream.Flush();
-
-            fileStream.Close();
-
-            fileArticle.FileName = fileName;
+            fileArticle.FileName = await _fileService.UploadFile(file, FileArticle.FilesDirectory);
 
             _unitOfWork.FileArticleRepository.Add(fileArticle);
 
@@ -147,21 +113,9 @@ namespace SchoolSocialMediaServer.Controllers
                 .GetByIdAsync(id);
 
             if (fileArticle == null)
-            {
                 return NotFound();
-            }
 
-            var projectDirectory = Directory.GetCurrentDirectory();
-
-            if (projectDirectory == null)
-            {
-                throw new Exception("Error on file deleting");
-            }
-
-            var filePath = Path.Combine(
-                projectDirectory, "wwwroot", fileArticle.FilePath);
-
-            System.IO.File.Delete(filePath);
+            _fileService.DeleteFile(fileArticle.FilePathForServer);
 
             _unitOfWork.FileArticleRepository.Delete(fileArticle);
 

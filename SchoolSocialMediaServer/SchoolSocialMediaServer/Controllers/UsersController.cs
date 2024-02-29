@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.Extensions.FileProviders;
 using SchoolSocialMediaServer.Entities;
 using SchoolSocialMediaServer.Models;
 using SchoolSocialMediaServer.Repositories;
+using SchoolSocialMediaServer.Services;
 
 namespace SchoolSocialMediaServer.Controllers
 {
@@ -14,14 +14,18 @@ namespace SchoolSocialMediaServer.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IFileService _imagesService;
 
-        public UsersController(IUnitOfWork unitOfWork, IMapper mapper)
+        public UsersController(IUnitOfWork unitOfWork, IMapper mapper, IFileService imageService)
         {
             _unitOfWork = unitOfWork
                 ?? throw new ArgumentNullException(nameof(unitOfWork));
 
             _mapper = mapper
                 ?? throw new ArgumentNullException(nameof(mapper));
+
+            _imagesService = imageService 
+                ?? throw new ArgumentException(nameof(imageService));
         }
 
         [HttpGet]
@@ -65,12 +69,10 @@ namespace SchoolSocialMediaServer.Controllers
             if (userForCreateDto.SchoolId.HasValue)
             {
                 var school = await _unitOfWork.SchoolRepository
-                    .GetSchoolAsync(userForCreateDto.SchoolId);
+                    .GetByIdAsync(userForCreateDto.SchoolId);
 
                 if (school == null)
-                {
                     return NotFound(nameof(userForCreateDto.SchoolId));
-                }
             }
 
             var user = _mapper.Map<User>(userForCreateDto);
@@ -99,12 +101,10 @@ namespace SchoolSocialMediaServer.Controllers
             if (userForUpdateDto.SchoolId.HasValue)
             {
                 var school = await _unitOfWork.SchoolRepository
-                    .GetSchoolAsync(userForUpdateDto.SchoolId);
+                    .GetByIdAsync(userForUpdateDto.SchoolId);
 
                 if (school == null)
-                {
                     return NotFound(userForUpdateDto.SchoolId);
-                }
             }
 
             var user = await _unitOfWork.UserRepository
@@ -130,9 +130,7 @@ namespace SchoolSocialMediaServer.Controllers
                 .GetByIdAsync(id);
 
             if (user == null)
-            {
                 return NotFound(nameof(id));
-            }
 
             _unitOfWork.UserRepository.Delete(user);
 
@@ -146,52 +144,26 @@ namespace SchoolSocialMediaServer.Controllers
         public async Task<ActionResult<string>> AddUserImage(
             [FromForm] AddImageDto addImageDto, Guid id)
         {
-            await RemoveUserImage(id);
-
             var user = await _unitOfWork.UserRepository
                 .GetByIdAsync(id);
 
             if (user == null)
-            {
                 return NotFound(nameof(id));
-            }
+
+            if (user.ImagePath != null)
+                _imagesService.DeleteFile(user.ImagePath);
 
             var image = addImageDto.Image;
 
-            var fileExtension = Path.GetExtension(image.FileName);
-
-            var fileName = Guid.NewGuid().ToString() + fileExtension;
-
-            var projectDirectory = Directory.GetCurrentDirectory();
-
-            if (projectDirectory == null)
-            {
-                throw new Exception("Saving error");
-            }
-
-            var schoolImagesPath = Path.Combine(
-                projectDirectory, Entities.User.ImageFilesDirectory);
-
-            var filePath = new PhysicalFileProvider(schoolImagesPath).Root + fileName;
-
-            var fileStream = System.IO.File.Create(filePath);
-
-            await image.CopyToAsync(fileStream);
-
-            fileStream.Flush();
-
-            fileStream.Close();
-
-            user.ImageFileName = fileName;
-
+            user.ImageFileName = await _imagesService.UploadFile(
+                image, Entities.User.ImageFilesDirectory);
+            
             await _unitOfWork.SaveChangesAsync();
 
-            if (user.ImagePath == null)
-            {
-                return BadRequest(nameof(user.ImagePath));
-            }
+            if (user.ImagePath == null) return BadRequest(
+                nameof(user.ImagePath));
 
-            return user.ImagePath;
+            return user.ImagePathForClient!;
         }
 
         [HttpDelete("{id}/remove_image")]
@@ -201,26 +173,12 @@ namespace SchoolSocialMediaServer.Controllers
                 .GetByIdAsync(id);
 
             if (user == null)
-            {
                 return NotFound(nameof(id));
-            }
 
             if (user.ImagePath == null)
-            {
                 return BadRequest(nameof(user.ImagePath));
-            }
 
-            var projectDirectory = Directory.GetCurrentDirectory();
-
-            if (projectDirectory == null)
-            {
-                throw new Exception();
-            }
-
-            var imagePath = Path.Combine(
-                projectDirectory, user.ImagePath);
-
-            System.IO.File.Delete(imagePath);
+            _imagesService.DeleteFile(user.ImagePath);
 
             user.ImageFileName = null;
 
@@ -237,14 +195,10 @@ namespace SchoolSocialMediaServer.Controllers
                 .GetByEmailAsync(email);
 
             if (user == null)
-            {
                 return NotFound(nameof(email));
-            };
 
             if (!_unitOfWork.UserRepository.SignInUser(user, password))
-            {
                 return Unauthorized(nameof(password));
-            };
 
             return NoContent();
         }
@@ -256,13 +210,29 @@ namespace SchoolSocialMediaServer.Controllers
                 .GetByEmailAsync(email);
 
             if (user == null)
-            {
                 return NotFound(nameof(email));
-            }
 
             var userDto = _mapper.Map<UserDto>(user);
 
             return Ok(userDto);
+        }
+
+        [HttpPatch("{userId}")]
+        public async Task<ActionResult> PatchUser(
+            Guid userId, [FromBody] JsonPatchDocument patchDoc)
+        {
+            if (patchDoc == null) return BadRequest(nameof(patchDoc));
+
+            var user = await _unitOfWork.UserRepository
+                .GetByIdAsync(userId);
+
+            if (user == null) return NotFound(nameof(userId));
+
+            patchDoc.ApplyTo(user);
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }
