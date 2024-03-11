@@ -67,7 +67,7 @@ namespace SchoolSocialMediaServer.Entities
 
         public virtual ICollection<FileArticle> FileArticles { get; } = new List<FileArticle>();
 
-        public virtual ICollection<User> Users { get; } = new List<User>();
+        public virtual ICollection<User> Users { get; } = new List<User>()
 
         [NotMapped]
         public virtual ICollection<Article> ReportedArticles

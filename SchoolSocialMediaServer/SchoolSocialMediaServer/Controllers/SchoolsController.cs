@@ -251,5 +251,17 @@ namespace SchoolSocialMediaServer.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("{schoolId}/count_of_students")]
+        public async Task<ActionResult<int>> GetCountOfSchoolStudents(Guid schoolId)
+        {
+            var school = await _unitOfWork.SchoolRepository
+                .GetByIdAsync(schoolId);
+
+            if (school == null) return NotFound(nameof(schoolId));
+
+            return await _unitOfWork.SchoolRepository
+                .GetCountOfSchoolStudents(school);
+        }
     }
 }

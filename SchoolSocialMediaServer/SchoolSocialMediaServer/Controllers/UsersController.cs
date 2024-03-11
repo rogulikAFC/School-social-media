@@ -221,6 +221,8 @@ namespace SchoolSocialMediaServer.Controllers
         public async Task<ActionResult> PatchUser(
             Guid userId, [FromBody] JsonPatchDocument patchDoc)
         {
+            Console.WriteLine("Patch request executed");
+
             if (patchDoc == null) return BadRequest(nameof(patchDoc));
 
             var user = await _unitOfWork.UserRepository

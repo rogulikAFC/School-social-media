@@ -54,5 +54,11 @@ namespace SchoolSocialMediaServer.Repositories
                 .ThenInclude(a => a.Category)
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<int> GetCountOfSchoolStudents(School school)
+        {
+            return await _socialMediaDbContext.Users
+                .Where(u => u.School == school).CountAsync();
+        } 
     }
 }

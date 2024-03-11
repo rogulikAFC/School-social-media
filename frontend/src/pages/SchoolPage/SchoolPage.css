@@ -42,6 +42,13 @@
   letter-spacing: 0em;
 }
 
+.school-info-container__info-about-students {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 30px;
+}
+
 .categories-wrapper {
   align-self: center;
   display: flex;

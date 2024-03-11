@@ -14,5 +14,7 @@ namespace SchoolSocialMediaServer.Repositories
         void Delete(School school);
 
         Task<School?> GetSchoolWithArticlesAsync(Guid id);
+
+        Task<int> GetCountOfSchoolStudents(School school);
     }
 }
