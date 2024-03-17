@@ -53,7 +53,7 @@ namespace SchoolSocialMediaServer.Entities
 
         public string? PreviewImageFileName { get; set; }
 
-        public static string ImageFilesDirectory { get; } = "wwwroot/Images/ArticlePreviewsImages/";
+        public static string PreviewImageFilesDirectory { get; } = "wwwroot/Images/ArticlePreviewsImages/";
 
         public string? PreviewImagePath
         {
@@ -64,7 +64,7 @@ namespace SchoolSocialMediaServer.Entities
                     return null;
                 }
 
-                return ImageFilesDirectory + PreviewImageFileName;
+                return PreviewImageFilesDirectory + PreviewImageFileName;
             }
         }
 
@@ -81,7 +81,9 @@ namespace SchoolSocialMediaServer.Entities
             }
         }
 
+        public static string ImageFileDirectory { get; } = "wwwroot/Images/ArticleImages/";
 
+        public static string ImageFileDirectoryForClient { get; } = "Images/ArticleImages/";
 
         public DateTimeOffset Created { get; set; } = DateTimeOffset.UtcNow;
     }

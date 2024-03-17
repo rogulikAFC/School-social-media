@@ -4,6 +4,7 @@ using Microsoft.Extensions.FileProviders;
 using SchoolSocialMediaServer.Entities;
 using SchoolSocialMediaServer.Models;
 using SchoolSocialMediaServer.Repositories;
+using SchoolSocialMediaServer.Services;
 
 namespace SchoolSocialMediaServer.Controllers
 {
@@ -13,14 +14,18 @@ namespace SchoolSocialMediaServer.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IFileService _fileService;
 
-        public ArticlesController(IUnitOfWork unitOfWork, IMapper mapper)
+        public ArticlesController(IUnitOfWork unitOfWork, IMapper mapper, IFileService fileService)
         {
             _unitOfWork = unitOfWork
                 ?? throw new ArgumentNullException(nameof(unitOfWork));
 
             _mapper = mapper
                 ?? throw new ArgumentNullException(nameof(mapper));
+
+            _fileService = fileService
+                ?? throw new ArgumentNullException(nameof(fileService));
         }
 
         [HttpGet]
@@ -162,45 +167,14 @@ namespace SchoolSocialMediaServer.Controllers
             var article = await _unitOfWork.ArticleRepository
                 .GetByIdAsync(id);
 
-            if (article == null)
-            {
-                return NotFound(nameof(id));
-            }
+            if (article == null) return NotFound(nameof(id));
 
-            var image = addImageDto.Image;
-
-            var fileExtension = Path.GetExtension(image.FileName);
-
-            var imageFileName = Guid.NewGuid().ToString() + fileExtension;
-
-            var projectDirectory = Directory.GetCurrentDirectory();
-
-            if (projectDirectory == null)
-            {
-                throw new Exception("Saving error");
-            }
-
-            var articlePreviewImagesPath = Path.Combine(
-                projectDirectory, Article.ImageFilesDirectory);
-
-            var filePath = new PhysicalFileProvider(articlePreviewImagesPath).Root + imageFileName;
-
-            var fileStream = System.IO.File.Create(filePath);
-
-            await image.CopyToAsync(fileStream);
-
-            fileStream.Flush();
-
-            fileStream.Close();
-
-            article.PreviewImageFileName = imageFileName;
+            article.PreviewImageFileName = await _fileService.UploadFile(
+                addImageDto.Image, Article.PreviewImageFilesDirectory);
 
             await _unitOfWork.SaveChangesAsync();
 
-            if (article.PreviewImagePath == null)
-            {
-                return BadRequest(nameof(article.PreviewImageFileName));
-            }
+            if (article.PreviewImagePath == null) throw new Exception("Cannot upload image");
 
             return article.PreviewImagePath;
         }
@@ -211,34 +185,25 @@ namespace SchoolSocialMediaServer.Controllers
             var article = await _unitOfWork.ArticleRepository
                 .GetByIdAsync(id);
 
-            if (article == null)
-            {
-                return NotFound(nameof(id));
-            }
+            if (article == null) return NotFound(nameof(id));
 
-            if (article.PreviewImagePath == null)
-            {
+            if (article.PreviewImagePath == null) 
                 return BadRequest(nameof(article.PreviewImagePath));
-            }
-
-            var projectDirectory = Directory.GetCurrentDirectory();
-
-            if (projectDirectory == null)
-            {
-                throw new Exception();
-            }
-
-
-            var imagePath = Path.Combine(
-                projectDirectory, "wwwroot", article.PreviewImagePath);
-
-            System.IO.File.Delete(imagePath);
-
-            article.PreviewImageFileName = null;
+            
+            _fileService.DeleteFile(article.PreviewImagePath);
 
             await _unitOfWork.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        [Consumes("multipart/form-data")]
+        [HttpPost("upload_image")]
+        public async Task<ActionResult<string>> UploadArticleImage(
+            [FromForm] AddImageDto uploadImageDto)
+        {
+            return Article.ImageFileDirectoryForClient + await _fileService.UploadFile(
+                uploadImageDto.Image, Article.ImageFileDirectory);
         }
     }
 }
