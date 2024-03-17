@@ -13,6 +13,7 @@ import FileArticlesCategoryPage from "./pages/FileArticlesCategoryPage/FileArtic
 import CreateSchoolPage from "./pages/CreateSchoolPage/CreateSchoolPage";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import UserContextProvider from "./contexts/UserContext";
+import CreateArticlePage from "./pages/CreateArticlePage/CreateArticlePage";
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
       {
         path: "sign_up",
         element: <SignUpPage />
+      },
+      {
+        path: "school/:schoolId/create_article",
+        element: <CreateArticlePage />
       }
     ],
   },
