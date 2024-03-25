@@ -1,20 +1,35 @@
-import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import "./ImageUploadField.css";
 import WithModal from "../../WithModal/WithModal";
 import Cropper, { Area, Point } from "react-easy-crop";
 
-type ImageUploadFieldProps = {
-  blockName: string;
-  // setValue: (name: any, optionData: string | null | undefined) => void;
-  setCanvas: Dispatch<SetStateAction<HTMLCanvasElement | null>>;
+type ImageCropperProperties = {
+  aspect?: number;
+  borderRadius?: number | string;
 };
 
-const ImageUploadField = ({ blockName, setCanvas }: ImageUploadFieldProps) => {
+type ImageUploadFieldProps = {
+  blockName: string;
+  setCanvas: Dispatch<SetStateAction<HTMLCanvasElement | null>>;
+  imageCropperProperties?: ImageCropperProperties;
+};
+
+const ImageUploadField = ({
+  blockName,
+  setCanvas,
+  imageCropperProperties,
+}: ImageUploadFieldProps) => {
   const [imageUrl, setImageUrl] = useState<string>("");
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
   const [rotation, setRotation] = useState<number>(0);
   const [zoom, setZoom] = useState<number>(1);
   const [isModalShown, setIsModalShown] = useState<boolean>(false);
+
+  if (!imageCropperProperties)
+    imageCropperProperties = {
+      aspect: 3 / 3,
+      borderRadius: "50%",
+    };
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -131,16 +146,34 @@ const ImageUploadField = ({ blockName, setCanvas }: ImageUploadFieldProps) => {
       />
 
       <div className="image-field__field-container">
-        <label
-          htmlFor="image-field__input"
-          className="image-field__file-upload-button"
-        >
-          Загрузить изображение
-        </label>
+        <div className="image-field__upload-label">
+          <label
+            htmlFor="image-field__input"
+            className="image-field__file-upload-button"
+          >
+            Загрузить изображение
+          </label>
 
-        {inputRef.current
-          ? inputRef.current.value.replace("C:\\fakepath\\", "")
-          : "Ничего не выбрано"}
+          <div className="image-field__file-name">
+            {inputRef.current
+              ? inputRef.current.value.replace("C:\\fakepath\\", "")
+              : "Ничего не выбрано"}
+          </div>
+        </div>
+
+        {imageUrl && (
+          <img
+            className="image-field__preview"
+            src={imageUrl}
+            alt=""
+            style={{
+              borderRadius:
+                imageCropperProperties?.borderRadius == (null || 0)
+                  ? 15
+                  : imageCropperProperties!.borderRadius,
+            }}
+          />
+        )}
       </div>
 
       <WithModal
@@ -154,7 +187,7 @@ const ImageUploadField = ({ blockName, setCanvas }: ImageUploadFieldProps) => {
             crop={crop}
             rotation={rotation}
             zoom={zoom}
-            aspect={3 / 3}
+            aspect={imageCropperProperties?.aspect}
             onCropChange={setCrop}
             onRotationChange={setRotation}
             onCropComplete={onCropComplete}
@@ -173,6 +206,10 @@ const ImageUploadField = ({ blockName, setCanvas }: ImageUploadFieldProps) => {
           Готово
         </button>
       </WithModal>
+
+      <style>
+        {`.crop__crop-area {border-radius: ${imageCropperProperties?.borderRadius}}`}
+      </style>
     </div>
   );
 };
