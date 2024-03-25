@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolSocialMediaServer.Entities
 {
-    public class ArticleView 
+    public class ArticleView
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

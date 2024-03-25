@@ -13,21 +13,29 @@ namespace SchoolSocialMediaServer.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly ILogger<CategoriesController> _logger;
 
-        public CategoriesController(IUnitOfWork unitOfWork, IMapper mapper)
+        public CategoriesController(IUnitOfWork unitOfWork, IMapper mapper, ILogger<CategoriesController> logger)
         {
             _unitOfWork = unitOfWork
                 ?? throw new ArgumentNullException(nameof(unitOfWork));
 
             _mapper = mapper
                 ?? throw new ArgumentNullException(nameof(mapper));
+
+            _logger = logger
+                ?? throw new ArgumentNullException(nameof(logger));
+
         }
 
         [HttpGet]
-        public async Task<IEnumerable<CategoryWithoutArticlesDto>> ListCategories()
+        public async Task<IEnumerable<CategoryWithoutArticlesDto>> ListCategories(
+            [FromQuery] string? query, [FromQuery] string? dataType)
         {
+            _logger.LogInformation("dataType is: " + dataType);
+
             var categories = await _unitOfWork.CategoryRepository
-                .ListAsync();
+                .ListAsync(query, dataType);
 
             var categoryDtos = new List<CategoryWithoutArticlesDto>();
 
@@ -81,7 +89,7 @@ namespace SchoolSocialMediaServer.Controllers
             CategoryForCreateDto categoryForCreate)
         {
             var categoryEntity = _mapper.Map<Category>(categoryForCreate);
-            
+
             _unitOfWork.CategoryRepository.Add(categoryEntity);
 
             await _unitOfWork.SaveChangesAsync();

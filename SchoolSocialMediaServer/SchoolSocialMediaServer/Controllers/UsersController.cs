@@ -24,7 +24,7 @@ namespace SchoolSocialMediaServer.Controllers
             _mapper = mapper
                 ?? throw new ArgumentNullException(nameof(mapper));
 
-            _imagesService = imageService 
+            _imagesService = imageService
                 ?? throw new ArgumentException(nameof(imageService));
         }
 
@@ -118,7 +118,7 @@ namespace SchoolSocialMediaServer.Controllers
             _mapper.Map(userForUpdateDto, user);
 
             await _unitOfWork.SaveChangesAsync();
-            
+
             return NoContent();
         }
 
@@ -157,7 +157,7 @@ namespace SchoolSocialMediaServer.Controllers
 
             user.ImageFileName = await _imagesService.UploadFile(
                 image, Entities.User.ImageFilesDirectory);
-            
+
             await _unitOfWork.SaveChangesAsync();
 
             if (user.ImagePath == null) return BadRequest(

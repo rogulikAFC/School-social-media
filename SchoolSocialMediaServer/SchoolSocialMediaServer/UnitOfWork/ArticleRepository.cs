@@ -1,26 +1,38 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SchoolSocialMediaServer.DbContexts;
 using SchoolSocialMediaServer.Entities;
+
 namespace SchoolSocialMediaServer.UnitOfWork
 {
     public class ArticleRepository : IArticleRepository
     {
         private readonly SchoolSocialMediaDbContext _socialMediaDbContext;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public ArticleRepository(SchoolSocialMediaDbContext socialMediaDbContext)
+        public ArticleRepository(
+            SchoolSocialMediaDbContext socialMediaDbContext, ICategoryRepository categoryRepository)
         {
             _socialMediaDbContext = socialMediaDbContext
                 ?? throw new ArgumentNullException(nameof(socialMediaDbContext));
+
+            _categoryRepository = categoryRepository
+                ?? throw new ArgumentNullException(nameof(categoryRepository));
         }
 
         public void Add(Article article)
         {
             _socialMediaDbContext.Articles.Add(article);
+
+            /*if (article.Category != null) 
+                _categoryRepository.SetCategoryDataType(article.Category);   */       
         }
 
         public void Delete(Article article)
         {
             _socialMediaDbContext.Articles.Remove(article);
+
+            /* if (article.Category != null)
+                _categoryRepository.SetCategoryDataType(article.Category);*/
         }
 
         public async Task<Article?> GetByIdAsync(Guid id)

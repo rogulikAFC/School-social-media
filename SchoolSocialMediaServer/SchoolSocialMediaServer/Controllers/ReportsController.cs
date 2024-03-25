@@ -40,7 +40,7 @@ namespace SchoolSocialMediaServer.Controllers
 
             var reportedArticleDtos = new List<ArticleWithReportsDto>();
 
-            foreach(var article in reportedArticles)
+            foreach (var article in reportedArticles)
             {
                 var reportedArticleDto = _mapper.Map<ArticleWithReportsDto>(article);
 

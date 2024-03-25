@@ -16,7 +16,7 @@ namespace SchoolSocialMediaServer.Services
         {
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
 
-            var projectDirectory = Directory.GetCurrentDirectory() 
+            var projectDirectory = Directory.GetCurrentDirectory()
                 ?? throw new Exception("Cannot find project directory");
 
             var fileStream = File.Create(Path.Combine(

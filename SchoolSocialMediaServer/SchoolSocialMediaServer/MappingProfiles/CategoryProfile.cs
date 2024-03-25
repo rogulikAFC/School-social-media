@@ -9,7 +9,10 @@ namespace SchoolSocialMediaServer.MappingProfiles
         public CategoryProfile()
         {
             CreateMap<Category, CategoryWithArticlesDto>();
-            CreateMap<Category, CategoryWithoutArticlesDto>();
+
+            CreateMap<Category, CategoryWithoutArticlesDto>()
+                .BeforeMap((s, d) => d.DataType = s.DataType.ToString());
+            
             CreateMap<CategoryForCreateDto, Category>();
         }
     }

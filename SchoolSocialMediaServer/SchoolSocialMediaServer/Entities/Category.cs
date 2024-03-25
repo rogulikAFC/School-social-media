@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using SchoolSocialMediaServer.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SchoolSocialMediaServer.Entities
@@ -16,5 +17,31 @@ namespace SchoolSocialMediaServer.Entities
         public ICollection<Article> Articles { get; } = new List<Article>();
 
         public ICollection<FileArticle> FileArticles { get; } = new List<FileArticle>();
+
+        public ArticleDataTypes DataType
+        {
+            get
+            {
+                if (Articles.Any() && FileArticles.Any())
+                {
+                    return ArticleDataTypes.Combined;
+
+                }
+                else if (Articles.Any())
+                {
+                    return ArticleDataTypes.Text;
+
+                }
+                else if (FileArticles.Any())
+                {
+                    return ArticleDataTypes.File;
+
+                }
+                else
+                {
+                    return ArticleDataTypes.Empty;
+                }
+            }
+        }
     }
 }

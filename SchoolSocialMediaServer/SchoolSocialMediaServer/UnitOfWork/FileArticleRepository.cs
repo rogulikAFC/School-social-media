@@ -1,30 +1,38 @@
 ﻿using SchoolSocialMediaServer.Entities;
 using SchoolSocialMediaServer.DbContexts;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using SchoolSocialMediaServer.Models;
-using System.Security.Cryptography.X509Certificates;
 
 namespace SchoolSocialMediaServer.UnitOfWork
 {
     public class FileArticleRepository : IFileArticleRepository
     {
         private readonly SchoolSocialMediaDbContext _context;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public FileArticleRepository(SchoolSocialMediaDbContext context)
+        public FileArticleRepository(
+            SchoolSocialMediaDbContext context, ICategoryRepository categoryRepository)
         {
             _context = context
                 ?? throw new ArgumentNullException(nameof(context));
+
+            _categoryRepository = categoryRepository
+                ?? throw new ArgumentNullException(nameof(categoryRepository));
         }
 
         public void Add(FileArticle article)
         {
             _context.FileArticles.Add(article);
+
+            /* if (article.Category != null)
+                _categoryRepository.SetCategoryDataType(article.Category); */
         }
 
         public void Delete(FileArticle article)
         {
             _context.FileArticles.Remove(article);
+
+            /*if (article.Category != null)
+                _categoryRepository.SetCategoryDataType(article.Category); */
         }
 
         public async Task<FileArticle?> GetByIdAsync(Guid id)

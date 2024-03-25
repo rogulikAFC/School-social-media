@@ -100,9 +100,9 @@ namespace SchoolSocialMediaServer.Controllers
             var fileArticleDto = _mapper.Map<FileArticleDto>(fileArticle);
 
             return CreatedAtAction(nameof(GetFileArticle), new
-                {
-                    fileArticle.Id
-                },
+            {
+                fileArticle.Id
+            },
                 fileArticleDto);
         }
 

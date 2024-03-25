@@ -21,12 +21,13 @@ namespace SchoolSocialMediaServer.Entities
         public string Password { get; set; } = null!;
 
         public int ProfileViewCount { get; set; }
-        
+
         public string? ImageFileName { get; set; }
 
         public static string ImageFilesDirectory { get; } = "wwwroot/Images/UserImages/";
 
-        public string? ImagePath {
+        public string? ImagePath
+        {
             get
             {
                 if (ImageFileName == null)

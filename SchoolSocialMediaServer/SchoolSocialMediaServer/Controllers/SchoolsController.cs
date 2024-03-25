@@ -1,13 +1,9 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.FileProviders;
 using SchoolSocialMediaServer.Entities;
 using SchoolSocialMediaServer.Models;
 using SchoolSocialMediaServer.Repositories;
 using SchoolSocialMediaServer.Services;
-using System.Net.WebSockets;
-using System.Runtime.CompilerServices;
 
 namespace SchoolSocialMediaServer.Controllers
 {
@@ -126,7 +122,7 @@ namespace SchoolSocialMediaServer.Controllers
             {
                 return Unauthorized();
             }
-            
+
             var schoolEntity = await _unitOfWork.SchoolRepository
                 .GetByIdAsync(id);
 
@@ -197,7 +193,7 @@ namespace SchoolSocialMediaServer.Controllers
             {
                 return BadRequest(nameof(schoolEntity.ImagePath));
             }
-            
+
             var projectDirectory = Directory.GetCurrentDirectory();
 
             if (projectDirectory == null)

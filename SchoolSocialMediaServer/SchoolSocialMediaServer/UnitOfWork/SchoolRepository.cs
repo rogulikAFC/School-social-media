@@ -18,9 +18,9 @@ namespace SchoolSocialMediaServer.Repositories
             int pageNum, int pageSize, string? query)
         {
             return await _socialMediaDbContext.Schools
-                .Where(s => 
-                    query == null 
-                    || s.Address.ToLower().Contains(query) 
+                .Where(s =>
+                    query == null
+                    || s.Address.ToLower().Contains(query)
                     || s.Name.ToLower().Contains(query))
                 .Skip((pageNum - 1) * pageSize)
                 .Take(pageSize)
@@ -59,6 +59,6 @@ namespace SchoolSocialMediaServer.Repositories
         {
             return await _socialMediaDbContext.Users
                 .Where(u => u.School == school).CountAsync();
-        } 
+        }
     }
 }

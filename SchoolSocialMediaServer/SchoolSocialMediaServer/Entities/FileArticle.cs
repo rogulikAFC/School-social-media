@@ -44,6 +44,6 @@ namespace SchoolSocialMediaServer.Entities
         [ForeignKey(nameof(SchoolId))]
         public School School { get; set; } = null!;
 
-        public DateTimeOffset CreatedUTC {  get; set; } = DateTimeOffset.UtcNow;
+        public DateTimeOffset CreatedUTC { get; set; } = DateTimeOffset.UtcNow;
     }
 }

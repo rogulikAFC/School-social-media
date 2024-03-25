@@ -28,7 +28,7 @@ builder.Services.AddCors(options =>
                 .AllowCredentials();
         });
 });
-    
+
 builder.Services.AddControllers()
     .AddNewtonsoftJson();
 

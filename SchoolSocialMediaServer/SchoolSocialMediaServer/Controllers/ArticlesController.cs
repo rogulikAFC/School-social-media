@@ -87,9 +87,9 @@ namespace SchoolSocialMediaServer.Controllers
             var articleDto = _mapper.Map<ArticleDto>(articleEntity);
 
             return CreatedAtAction(nameof(GetArticleById), new
-                {
-                    article.Id,
-                },
+            {
+                article.Id,
+            },
                 articleDto);
         }
 
@@ -187,9 +187,9 @@ namespace SchoolSocialMediaServer.Controllers
 
             if (article == null) return NotFound(nameof(id));
 
-            if (article.PreviewImagePath == null) 
+            if (article.PreviewImagePath == null)
                 return BadRequest(nameof(article.PreviewImagePath));
-            
+
             _fileService.DeleteFile(article.PreviewImagePath);
 
             await _unitOfWork.SaveChangesAsync();
