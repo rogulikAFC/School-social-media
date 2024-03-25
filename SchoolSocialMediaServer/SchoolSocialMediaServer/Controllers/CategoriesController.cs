@@ -30,12 +30,10 @@ namespace SchoolSocialMediaServer.Controllers
 
         [HttpGet]
         public async Task<IEnumerable<CategoryWithoutArticlesDto>> ListCategories(
-            [FromQuery] string? query, [FromQuery] string? dataType)
+            [FromQuery] string? query, [FromQuery] string? dataType, [FromQuery] Guid? schoolId)
         {
-            _logger.LogInformation("dataType is: " + dataType);
-
             var categories = await _unitOfWork.CategoryRepository
-                .ListAsync(query, dataType);
+                .ListAsync(query, dataType, schoolId);
 
             var categoryDtos = new List<CategoryWithoutArticlesDto>();
 
@@ -65,7 +63,7 @@ namespace SchoolSocialMediaServer.Controllers
             return categoryDto;
         }
 
-        [HttpGet("school/{schoolId}/has_content/{contentType}")]
+        /* [HttpGet("school/{schoolId}/has_content/{contentType}")]
         public async Task<ActionResult<CategoryWithoutArticlesDto>> GetCategoryByContentType(
             Guid schoolId, string contentType)
         {
@@ -82,7 +80,7 @@ namespace SchoolSocialMediaServer.Controllers
             }
 
             return Ok(categoryDtos);
-        }
+        } */
 
         [HttpPost]
         public async Task<ActionResult<CategoryWithoutArticlesDto>> PostCategory(

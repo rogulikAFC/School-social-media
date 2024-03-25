@@ -15,10 +15,7 @@ import { UserContext } from "../../contexts/UserContext";
 const SchoolPage = () => {
   const { schoolId } = useParams();
   const [school, setSchool] = useState<School>();
-  const [articleCategories, setArticleCategories] = useState<Category[]>([]);
-  const [fileArticleCategories, setFileArticleCategories] = useState<
-    Category[]
-  >([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const { getCredentials } = useContext(UserContext);
   const [doesUserStudiesInSchool, setDoesUserStudiesInSchool] = useState(false);
   const [countOfUsers, setCountOfUsers] = useState(0);
@@ -38,33 +35,18 @@ const SchoolPage = () => {
       setSchool(schoolFromJson);
     };
 
-    const getArticleCategories = async () => {
+    const getCategories = async () => {
       const response = await fetch(
-        `${config.SERVER_URL}api/Categories/school/${schoolId}/has_content/articles`
-      );
+        config.SERVER_URL + `api/Categories?schoolId=${schoolId}`
+      )
 
       if (!response.ok) return;
 
-      const categoriesFromJson: Category[] = await response.json();
-
-      setArticleCategories(categoriesFromJson);
-    };
-
-    const getFileArticlesCategories = async () => {
-      const response = await fetch(
-        `${config.SERVER_URL}api/Categories/school/${schoolId}/has_content/fileArticles`
-      );
-
-      if (!response.ok) return;
-
-      const categoriesFromJson: Category[] = await response.json();
-
-      setFileArticleCategories(categoriesFromJson);
-    };
+      setCategories(await response.json() as Category[])
+    }
 
     getSchool();
-    getFileArticlesCategories();
-    getArticleCategories();
+    getCategories();
   }, []);
 
   useEffect(() => {
@@ -139,7 +121,7 @@ const SchoolPage = () => {
       <div className="categories-wrapper school-info-container__categories-wrapper">
         <TitleForCards blockName="categories-wrapper">Статьи</TitleForCards>
         <EntitiesContainer
-          entities={articleCategories}
+          entities={categories.filter(category => ["Text", "Combined"].includes(category.dataType))}
           entitiesPluralName="categories"
           blockName="categories-wrapper"
           EntityComponent={CategoryTag}
@@ -150,7 +132,7 @@ const SchoolPage = () => {
 
         <TitleForCards blockName="categories-wrapper">Файлы</TitleForCards>
         <EntitiesContainer
-          entities={fileArticleCategories}
+          entities={categories.filter(category => ["File", "Combined"].includes(category.dataType))}
           entitiesPluralName="categories"
           blockName="categories-wrapper"
           EntityComponent={CategoryTag}
