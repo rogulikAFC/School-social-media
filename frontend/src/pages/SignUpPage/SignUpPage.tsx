@@ -30,10 +30,6 @@ const SignUpPage = () => {
     null
   );
 
-  const [schoolOptions, setSchoolOptions] = useState<
-    DynamicSelectFieldOption[]
-  >([]);
-
   const loadSchoolsByQuery = async (query: string) => {
     const response = await fetch(
       config.SERVER_URL + "api/Schools/?query=" + query.toLowerCase()
@@ -68,7 +64,7 @@ const SignUpPage = () => {
 
     if (!isSignUpSuccessful) {
       console.error("sign up is unsuccessful");
-
+      
       return;
     }
 
@@ -157,7 +153,6 @@ const SignUpPage = () => {
           blockName="form"
           dataListName="schools"
           loadOptionsByQuery={loadSchoolsByQuery}
-          options={schoolOptions}
           register={register("schoolId", {
             required: false,
           })}

@@ -133,8 +133,6 @@ const ImageUploadField = ({
 
   return (
     <div className={`image-field ${blockName}__image-field`}>
-      {/* <img src={imageUrl} className="image-field__preview" /> */}
-
       <input
         type="file"
         accept="image/*"

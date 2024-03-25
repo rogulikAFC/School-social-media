@@ -2,31 +2,48 @@ import "./CreateArticlePage.css";
 import { useParams } from "react-router-dom";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { createRef, useCallback, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { config } from "../../../config";
-import { FieldValues, RegisterOptions, useForm } from "react-hook-form";
-import { mergeRefs } from "../../shared/functions/mergeRefs";
+import { useForm } from "react-hook-form";
 import DynamicSelectField, {
   DynamicSelectFieldOption,
 } from "../../Forms/DynamicSelectField/DynamicSelectField";
+import TextField from "../../Forms/TextField/TextField";
+import { UserContext } from "../../contexts/UserContext";
+import ImageUploadField from "../../Forms/ImageUploadField/ImageUploadField";
 
 type ArticleForm = {
-  text: string;
+  title: string;
+  content: string;
   categoryId: string;
+  schoolId: string;
+  userId: string;
 };
 
 const CreateArticlePage = () => {
   const { schoolId } = useParams();
   const quillObjectRef = useRef<ReactQuill>(null);
   const { register, handleSubmit, setValue } = useForm<ArticleForm>();
+  const { getCredentials } = useContext(UserContext);
+  const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 
-  const [categories, setCategories] = useState<DynamicSelectFieldOption[]>([]);
+  const [quillValue, setQuillValue] = useState<string>("");
 
   useEffect(() => {
-    const value = (quillObjectRef.current?.value as string) ?? "";
+    schoolId == null || setValue("schoolId", schoolId);
+  }, [schoolId]);
 
-    setValue("text", value);
-  }, [quillObjectRef.current?.value]);
+  useEffect(() => {
+    const getUserId = async () => {
+      const userCredentials = await getCredentials();
+
+      if (!userCredentials) return;
+
+      setValue("userId", userCredentials.id);
+    };
+
+    getUserId();
+  }, []);
 
   const loadCategoriesByQuery = async (query: string) => {
     const response = await fetch(
@@ -89,29 +106,90 @@ const CreateArticlePage = () => {
     };
   };
 
-  const handleFormSubmit = handleSubmit((data) => {
+  const handleFormSubmit = handleSubmit(async (data) => {
     console.log(data);
+
+    const articleResponse = await fetch(config.SERVER_URL + "api/Articles", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!articleResponse.ok) return console.log("Response is bad");
+
+    const article = await articleResponse.json();
+
+    console.log(article);
+
+    canvas?.toBlob(async (blob) => {
+      if (!blob) throw new Error("No BLOB image");
+
+      const formData = new FormData();
+
+      const file = new File([blob], "image.jpg", { type: "image/jpeg" });
+
+      formData.append("Image", file);
+
+      const previewImageResponse = await fetch(
+        config.SERVER_URL + `api/Articles/${article.id}/add_preview_image`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (!previewImageResponse.ok)
+        return console.error("image uploading is unsuccessful");
+    }, "image/jpeg");
   });
 
   return (
-    <div className="create-article-page">
-      <form className="form create-article-page__form" onSubmit={handleFormSubmit}>
+    <div className="create-article-page create-page">
+      <form
+        className="form create-article-page__form"
+        onSubmit={handleFormSubmit}
+      >
+        <TextField
+          name="Заголовок"
+          blockName="form"
+          register={register("title")}
+          errorFromHook={undefined}
+        />
+
         <ReactQuill // You can get value using quillObjectRef.current?.value
           ref={quillObjectRef}
           theme="snow"
-          modules={{
-            toolbar: {
-              container: [
-                [{ header: [1, false] }],
-                ["bold", "italic", "underline"],
-                ["image"],
-              ],
-              handlers: {
-                image: handleImageUpload,
+          modules={useMemo(
+            () => ({
+              toolbar: {
+                container: [
+                  [{ header: [1, false] }],
+                  ["bold", "italic", "underline"],
+                  ["image"],
+                ],
+                handlers: {
+                  image: handleImageUpload,
+                },
               },
-            },
+            }),
+            []
+          )}
+          value={quillValue}
+          onChange={(newValue) => {
+            setQuillValue(newValue);
+            setValue("content", newValue);
           }}
-          // {...(register("text") as Omit<RegisterOptions, "ref">)}
+        />
+
+        <ImageUploadField
+          blockName="form"
+          setCanvas={setCanvas}
+          imageCropperProperties={{
+            aspect: 3 / 2,
+            borderRadius: 0,
+          }}
         />
 
         <DynamicSelectField
@@ -119,8 +197,10 @@ const CreateArticlePage = () => {
           register={register("categoryId")}
           dataListName="categories"
           loadOptionsByQuery={loadCategoriesByQuery}
-          setValue={setCategories}
+          setValue={setValue}
         />
+
+        <button className="form__submit-button">Submit</button>
       </form>
     </div>
   );

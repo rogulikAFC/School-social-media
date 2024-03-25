@@ -186,3 +186,7 @@ strong {
 em {
   font-style: italic;
 }
+
+.article-container__content img {
+  width: 100%;
+}
