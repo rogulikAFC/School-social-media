@@ -10,7 +10,7 @@ type UserContextValue = {
 
 const cookies = new Cookies(null, { path: "/" });
 
-const getCredentials = async (): Promise<User | null> => {
+const getCredentials = async () => {
   const userId = cookies.get("userId");
 
   console.log({ userId });

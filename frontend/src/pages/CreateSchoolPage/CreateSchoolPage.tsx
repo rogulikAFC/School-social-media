@@ -2,51 +2,74 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import TextField from "../../Forms/TextField/TextField";
 import "./CreateSchoolPage.css";
 import "../../Forms/Form.css";
-import DynamicSelectField, {
-  DynamicSelectFieldOption,
-} from "../../Forms/DynamicSelectField/DynamicSelectField";
-import { useState } from "react";
-import { config } from "../../../config";
 import ImageUploadField from "../../Forms/ImageUploadField/ImageUploadField";
+import { useContext, useState } from "react";
+import { UserContext } from "../../contexts/UserContext";
+import { config } from "../../../config";
 
 type SchoolPageInput = {
   city: string;
   address: string;
   name: string;
   creatorUserId: string;
-  image: string;
 };
 
 const CreateSchoolPage = () => {
-  const { register, handleSubmit, setValue } = useForm<SchoolPageInput>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SchoolPageInput>();
 
-  const [testOptions, setTestOptions] = useState<DynamicSelectFieldOption[]>(
-    []
-  );
+  const { getCredentials } = useContext(UserContext);
+
+  const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 
   const onSubmit: SubmitHandler<SchoolPageInput> = async (data) => {
-    // data.creatorUserId = "cceee826-79c9-4909-a3ac-cd3675f85f4b";
+    const userId = (await getCredentials())?.id;
+
+    if (userId == null) return;
+
+    data.creatorUserId = userId;
 
     console.log(data);
-  };
 
-  const loadTestOptions = async (query: string) => {
-    const response = await fetch(
-      config.SERVER_URL + "api/Articles?query=" + query.toLowerCase()
-    );
+    const schoolResponse = await fetch(config.SERVER_URL + "api/Schools", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-    const jsonArticles: Article[] = await response.json();
+    if (!schoolResponse.ok) return;
 
-    setTestOptions(
-      jsonArticles.map((article) => {
-        const schoolOption: DynamicSelectFieldOption = {
-          value: article.id,
-          inner: article.title,
-        };
+    const schoolId = ((await schoolResponse.json()) as School).id;
 
-        return schoolOption;
-      })
-    );
+    canvas?.toBlob(async (blob) => {
+      if (!blob) throw new Error("No image BLOB");
+
+      const formData = new FormData();
+
+      const file = new File([blob], "image.jpg");
+
+      formData.append("Image", file);
+
+      const imageResponse = await fetch(
+        config.SERVER_URL +
+          "api/Schools/" +
+          schoolId +
+          "/add_image/by_admin/" +
+          userId,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (!imageResponse.ok)
+        return console.error("image uploading is unsuccessful");
+    }, "image/jpeg");
   };
 
   return (
@@ -59,28 +82,30 @@ const CreateSchoolPage = () => {
           name="Населенный пункт"
           blockName="form"
           register={register("city")}
+          errorFromHook={errors.city?.message}
         />
+
         <TextField
           name="Адрес"
           blockName="form"
           register={register("address")}
+          errorFromHook={errors.address?.message}
         />
+
         <TextField
           name="Название"
           blockName="form"
           register={register("name")}
+          errorFromHook={errors.name?.message}
         />
 
-        <DynamicSelectField
-          blockName="form"
-          dataListName="tests"
-          loadOptionsByQuery={loadTestOptions}
-          options={testOptions}
-          register={register("creatorUserId")}
+        {/* <ImageUploadField
+          register={register("image")}
           setValue={setValue}
-        />
+          blockName="form"
+        /> */}
 
-        <ImageUploadField register={register("image")} setValue={setValue} blockName="form" />
+        <ImageUploadField blockName="form" setCanvas={setCanvas} />
 
         <input type="submit" className="form__submit-button" />
       </form>
