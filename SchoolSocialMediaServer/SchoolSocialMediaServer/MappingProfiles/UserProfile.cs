@@ -15,6 +15,9 @@ namespace SchoolSocialMediaServer.MappingProfiles
 
             CreateMap<UserForCreateDto, User>()
                 .AfterMap((s, d) => d.Password = BCrypt.Net.BCrypt.HashPassword(s.Password));
+
+            CreateMap<User, UserWithoutSchoolDto>()
+                .AfterMap((s, d) => d.ImagePath = s.ImagePathForClient);
         }
     }
 }

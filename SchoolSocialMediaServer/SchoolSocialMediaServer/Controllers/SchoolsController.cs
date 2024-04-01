@@ -259,5 +259,11 @@ namespace SchoolSocialMediaServer.Controllers
             return await _unitOfWork.SchoolRepository
                 .GetCountOfSchoolStudents(school);
         }
+
+        /* [HttpGet("{schoolId}/list_admins")]
+        public async Task<ActionResult<ICollection<UserDto>>> GetSchoolAdmins(Guid schoolId)
+        {
+
+        } */
     }
 }

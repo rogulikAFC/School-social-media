@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SchoolSocialMediaServer.DbContexts;
 using SchoolSocialMediaServer.Entities;
+using System.Text.RegularExpressions;
 
 namespace SchoolSocialMediaServer.Repositories
 {
@@ -18,6 +19,8 @@ namespace SchoolSocialMediaServer.Repositories
             int pageNum, int pageSize, string? query)
         {
             return await _socialMediaDbContext.Schools
+                .Include(s => s.AdminStatuses)
+                .ThenInclude(a => a.User)
                 .Where(s =>
                     query == null
                     || s.Address.ToLower().Contains(query)
@@ -30,6 +33,8 @@ namespace SchoolSocialMediaServer.Repositories
         public async Task<School?> GetByIdAsync(Guid? id)
         {
             return await _socialMediaDbContext.Schools
+                .Include(s => s.AdminStatuses)
+                .ThenInclude(a => a.User)
                 .FirstOrDefaultAsync(s => s.Id == id);
         }
 
@@ -52,6 +57,8 @@ namespace SchoolSocialMediaServer.Repositories
                 .ThenInclude(a => a.User)
                 .Include(s => s.Articles)
                 .ThenInclude(a => a.Category)
+                .Include(s => s.AdminStatuses)
+                .ThenInclude(a => a.User)
                 .FirstOrDefaultAsync();
         }
 
@@ -60,5 +67,10 @@ namespace SchoolSocialMediaServer.Repositories
             return await _socialMediaDbContext.Users
                 .Where(u => u.School == school).CountAsync();
         }
+
+        /* public async Task<IEnumerable<User>> GetSchoolAdmins(School school)
+        {
+            
+        } */
     }
 }

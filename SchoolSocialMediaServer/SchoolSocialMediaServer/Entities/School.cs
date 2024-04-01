@@ -78,6 +78,11 @@ namespace SchoolSocialMediaServer.Entities
             }
         }
 
+        public virtual ICollection<AdminStatus> AdminStatuses { get; }
+            = new List<AdminStatus>();
+
+        [NotMapped]
+        public virtual IEnumerable<User> Admins => AdminStatuses.Select(a => a.User);
         public School() { }
     }
 }

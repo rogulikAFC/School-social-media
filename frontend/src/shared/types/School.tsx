@@ -4,4 +4,5 @@ type School = {
   name: string
   imagePath: string
   nameWithAddress: string
+  admins: Omit<User, "school">[]
 }

@@ -4,12 +4,18 @@
     "profile-image info-block"
     "profile-image share-container";
   gap: 18px 64px;
-  align-self: center;
   max-width: max-content;
-  margin: 25px 3vw 0 3vw;
   padding: 32px 64px;
-  background-color: white;
+}
+
+.school-block-wrapper {
+  align-self: center;
   border-radius: 13px;
+  background-color: white;
+}
+
+.main-page__school-block-wrapper {
+  margin: 25px 3vw 0 3vw;
 }
 
 .school-info-container__info-block {
@@ -50,16 +56,16 @@
 }
 
 .categories-wrapper {
-  align-self: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: white;
-  border-radius: 13px;
-  margin: 25px 3vw 0 3vw;
   padding: 16px;
   gap: 16px;
   max-width: max-content;
+}
+
+.school-admin-block {
+  padding: 16px;
 }
 
 @media screen and (max-width: 480px) {

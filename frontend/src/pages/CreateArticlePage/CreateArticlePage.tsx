@@ -2,7 +2,14 @@ import "./CreateArticlePage.css";
 import { useParams } from "react-router-dom";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { config } from "../../../config";
 import { useForm } from "react-hook-form";
 import DynamicSelectField, {
@@ -11,6 +18,8 @@ import DynamicSelectField, {
 import TextField from "../../Forms/TextField/TextField";
 import { UserContext } from "../../contexts/UserContext";
 import ImageUploadField from "../../Forms/ImageUploadField/ImageUploadField";
+import { FormError } from "../../Forms/FormError/FormError";
+import useSchoolAdminCheck from "../../hooks/useSchoolAdminCheck";
 
 type ArticleForm = {
   title: string;
@@ -24,26 +33,14 @@ const CreateArticlePage = () => {
   const { schoolId } = useParams();
   const quillObjectRef = useRef<ReactQuill>(null);
   const { register, handleSubmit, setValue } = useForm<ArticleForm>();
-  const { getCredentials } = useContext(UserContext);
+  let { getCredentials } = useContext(UserContext);
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 
+  const [school, setSchool] = useState<School>();
   const [quillValue, setQuillValue] = useState<string>("");
+  const { isUserAdmin } = useSchoolAdminCheck(school);
 
-  useEffect(() => {
-    schoolId == null || setValue("schoolId", schoolId);
-  }, [schoolId]);
-
-  useEffect(() => {
-    const getUserId = async () => {
-      const userCredentials = await getCredentials();
-
-      if (!userCredentials) return;
-
-      setValue("userId", userCredentials.id);
-    };
-
-    getUserId();
-  }, []);
+  getCredentials = useCallback(getCredentials, []);
 
   const loadCategoriesByQuery = async (query: string) => {
     const response = await fetch(
@@ -86,11 +83,7 @@ const CreateArticlePage = () => {
         }
       );
 
-      if (!response.ok) {
-        console.error("image uploading is unsuccessful");
-
-        return;
-      }
+      if (!response.ok) return console.error("image uploading is unsuccessful");
 
       const quillObject = quillObjectRef.current;
 
@@ -145,6 +138,59 @@ const CreateArticlePage = () => {
     }, "image/jpeg");
   });
 
+  const quillModules = useMemo(
+    () => ({
+      toolbar: {
+        container: [
+          [{ header: [1, false] }],
+          ["bold", "italic", "underline"],
+          ["image"],
+        ],
+        handlers: {
+          image: handleImageUpload,
+        },
+      },
+    }),
+    []
+  );
+
+  useEffect(() => {
+    if (schoolId == null) return;
+
+    setValue("schoolId", schoolId);
+
+    const getSchool = async () => {
+      const response = await fetch(
+        config.SERVER_URL + `api/Schools/${schoolId}`
+      );
+
+      if (!response.ok) return;
+
+      setSchool(await response.json());
+    };
+
+    getSchool();
+  }, [schoolId]);
+
+  useEffect(() => {
+    const getUserId = async () => {
+      const userCredentials = await getCredentials();
+
+      if (!userCredentials) return;
+
+      setValue("userId", userCredentials.id);
+    };
+
+    getUserId();
+  }, []);
+
+  if (!isUserAdmin)
+    return (
+      <FormError blockName="main-page">
+        "Ошибка 401. Вы не авторизованы как админ."
+      </FormError>
+    );
+
   return (
     <div className="create-article-page create-page">
       <form
@@ -161,21 +207,7 @@ const CreateArticlePage = () => {
         <ReactQuill // You can get value using quillObjectRef.current?.value
           ref={quillObjectRef}
           theme="snow"
-          modules={useMemo(
-            () => ({
-              toolbar: {
-                container: [
-                  [{ header: [1, false] }],
-                  ["bold", "italic", "underline"],
-                  ["image"],
-                ],
-                handlers: {
-                  image: handleImageUpload,
-                },
-              },
-            }),
-            []
-          )}
+          modules={quillModules}
           value={quillValue}
           onChange={(newValue) => {
             setQuillValue(newValue);

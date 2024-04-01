@@ -1,5 +1,5 @@
 import "./SchoolPage.css";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import { config } from "../../../config";
 import ProfileImage from "../../ProfileImage/ProfileImage";
@@ -11,16 +11,21 @@ import { CategoryTypes } from "../../WithNavigationToCategory/WithNavigationToCa
 import TitleForCards from "../../Title/TitleForCards";
 import SelectSchoolButton from "../../SelectSchoolButton/SelectSchoolButton";
 import { UserContext } from "../../contexts/UserContext";
+import CreateNewArticleButton from "../../CreateNewArticleButton/CreateNewArticleButton";
+import useSchoolAdminCheck from "../../hooks/useSchoolAdminCheck";
 
 const SchoolPage = () => {
   const { schoolId } = useParams();
   const [school, setSchool] = useState<School>();
   const [categories, setCategories] = useState<Category[]>([]);
-  const { getCredentials } = useContext(UserContext);
+  let { getCredentials } = useContext(UserContext);
   const [doesUserStudiesInSchool, setDoesUserStudiesInSchool] = useState(false);
   const [countOfUsers, setCountOfUsers] = useState(0);
   const [doesGettingInfoAboutStudents, setDoesGettingInfoAboutStudents] =
     useState(true);
+  const { isUserAdmin } = useSchoolAdminCheck(school);
+
+  getCredentials = useCallback(getCredentials, []);
 
   useEffect(() => {
     const getSchool = async () => {
@@ -38,12 +43,12 @@ const SchoolPage = () => {
     const getCategories = async () => {
       const response = await fetch(
         config.SERVER_URL + `api/Categories?schoolId=${schoolId}`
-      )
+      );
 
       if (!response.ok) return;
 
-      setCategories(await response.json() as Category[])
-    }
+      setCategories((await response.json()) as Category[]);
+    };
 
     getSchool();
     getCategories();
@@ -81,7 +86,7 @@ const SchoolPage = () => {
 
   return (
     <>
-      <div className="school-info-container main-page__school-info-container">
+      <div className="school-block-wrapper school-info-container main-page__school-block-wrapper main-page__school-info-container">
         <ProfileImage
           blockName="school-info-container"
           imageSource={
@@ -118,10 +123,12 @@ const SchoolPage = () => {
         />
       </div>
 
-      <div className="categories-wrapper school-info-container__categories-wrapper">
+      <div className="school-block-wrapper categories-wrapper main-page__school-block-wrapper main-page__categories-wrapper">
         <TitleForCards blockName="categories-wrapper">Статьи</TitleForCards>
         <EntitiesContainer
-          entities={categories.filter(category => ["Text", "Combined"].includes(category.dataType))}
+          entities={categories.filter((category) =>
+            ["Text", "Combined"].includes(category.dataType)
+          )}
           entitiesPluralName="categories"
           blockName="categories-wrapper"
           EntityComponent={CategoryTag}
@@ -132,7 +139,9 @@ const SchoolPage = () => {
 
         <TitleForCards blockName="categories-wrapper">Файлы</TitleForCards>
         <EntitiesContainer
-          entities={categories.filter(category => ["File", "Combined"].includes(category.dataType))}
+          entities={categories.filter((category) =>
+            ["File", "Combined"].includes(category.dataType)
+          )}
           entitiesPluralName="categories"
           blockName="categories-wrapper"
           EntityComponent={CategoryTag}
@@ -141,6 +150,15 @@ const SchoolPage = () => {
           isFilled={false}
         />
       </div>
+
+      {isUserAdmin && (
+        <div className="school-block-wrapper main-page__school-block-wrapper school-admin-block main-page__school-admin-block">
+          <CreateNewArticleButton
+            blockName="school-admin-block"
+            schoolId={schoolId ?? ""}
+          />
+        </div>
+      )}
 
       <EntitiesContainerWithLoadMore
         blockName="main-page"
