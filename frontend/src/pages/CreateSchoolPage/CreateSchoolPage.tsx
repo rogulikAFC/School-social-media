@@ -6,6 +6,7 @@ import ImageUploadField from "../../Forms/ImageUploadField/ImageUploadField";
 import { useContext, useState } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import { config } from "../../../config";
+import FormValidateErrors from "../../shared/enums/FormValidateErrors";
 
 type SchoolPageInput = {
   city: string;
@@ -81,29 +82,50 @@ const CreateSchoolPage = () => {
         <TextField
           name="Населенный пункт"
           blockName="form"
-          register={register("city")}
+          register={register("city", {
+            required: {
+              value: true,
+              message: FormValidateErrors.required,
+            },
+            maxLength: {
+              value: 32,
+              message: FormValidateErrors.maxLengthAchieved,
+            },
+          })}
           errorFromHook={errors.city?.message}
         />
 
         <TextField
           name="Адрес"
           blockName="form"
-          register={register("address")}
+          register={register("address", {
+            required: {
+              value: true,
+              message: FormValidateErrors.required,
+            },
+            maxLength: {
+              value: 128,
+              message: FormValidateErrors.maxLengthAchieved,
+            },
+          })}
           errorFromHook={errors.address?.message}
         />
 
         <TextField
           name="Название"
           blockName="form"
-          register={register("name")}
+          register={register("name", {
+            required: {
+              value: true,
+              message: FormValidateErrors.required,
+            },
+            maxLength: {
+              value: 32,
+              message: FormValidateErrors.maxLengthAchieved,
+            },
+          })}
           errorFromHook={errors.name?.message}
         />
-
-        {/* <ImageUploadField
-          register={register("image")}
-          setValue={setValue}
-          blockName="form"
-        /> */}
 
         <ImageUploadField blockName="form" setCanvas={setCanvas} />
 

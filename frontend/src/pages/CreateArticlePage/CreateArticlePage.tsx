@@ -20,6 +20,7 @@ import { UserContext } from "../../contexts/UserContext";
 import ImageUploadField from "../../Forms/ImageUploadField/ImageUploadField";
 import { FormError } from "../../Forms/FormError/FormError";
 import useSchoolAdminCheck from "../../hooks/useSchoolAdminCheck";
+import FormValidateErrors from "../../shared/enums/FormValidateErrors";
 
 type ArticleForm = {
   title: string;
@@ -32,7 +33,12 @@ type ArticleForm = {
 const CreateArticlePage = () => {
   const { schoolId } = useParams();
   const quillObjectRef = useRef<ReactQuill>(null);
-  const { register, handleSubmit, setValue } = useForm<ArticleForm>();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<ArticleForm>();
   let { getCredentials } = useContext(UserContext);
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 
@@ -200,8 +206,17 @@ const CreateArticlePage = () => {
         <TextField
           name="Заголовок"
           blockName="form"
-          register={register("title")}
-          errorFromHook={undefined}
+          register={register("title", {
+            required: {
+              value: true,
+              message: "",
+            },
+            maxLength: {
+              value: 128,
+              message: FormValidateErrors.maxLengthAchieved,
+            },
+          })}
+          errorFromHook={errors.title?.message}
         />
 
         <ReactQuill // You can get value using quillObjectRef.current?.value
