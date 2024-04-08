@@ -39,7 +39,7 @@ const ArticleCategoryPage = () => {
       <EntitiesCategory
         title={`Категория "${categoryName}" школы ${schoolName}`}
         blockName="articles-category-page"
-        query={searchString}
+        searchString={searchString}
         entitiesPluralName="articles"
         Container={EntitiesContainer}
       />

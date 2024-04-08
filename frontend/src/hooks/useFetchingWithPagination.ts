@@ -44,19 +44,17 @@ const useFetchingWithPagination = <T>({
 
       setIsLoaded(false);
 
-      let response;
+      const response = await fetch(
+        config.SERVER_URL +
+          `${relativeUrlWithoutParams}?pageNum=${pageNum}&pageSize=${pageSize}&${
+            searchParams ? searchParams : ""
+          }`
+      );
 
-      try {
-        response = await fetch(
-          config.SERVER_URL +
-            `${relativeUrlWithoutParams}?pageNum=${pageNum}&pageSize=${pageSize}&${
-              searchParams ? searchParams : ""
-            }`
-        );
-      } catch (e) {
-        setError("Something went wrong");
+      if (!response.ok) {
+        if (response.status === 404) return;
 
-        return;
+        return setError("Something went wrong");
       }
 
       let json: T[] = await response.json();

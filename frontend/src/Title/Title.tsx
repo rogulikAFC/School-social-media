@@ -1,7 +1,7 @@
 import "./Title.css"
 
 export type TitleProps = {
-  children: string | string[];
+  children: any;
   blockName: string;
 };
 

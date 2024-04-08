@@ -44,8 +44,7 @@ namespace SchoolSocialMediaServer.UnitOfWork
         }
 
         public async Task<ICollection<FileArticle>> ListAsync(
-            int pageNum, int pageSize, Guid schoolId,
-            Guid? categoryId)
+            int pageNum, int pageSize, Guid schoolId, Guid? categoryId)
         {
             return await _context.FileArticles
                 .Include(a => a.School)

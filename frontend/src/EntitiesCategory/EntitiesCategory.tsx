@@ -7,7 +7,7 @@ import "./EntitiesCategory.css";
 type EntitiesCategoryProps = {
   blockName: string;
   title: string;
-  query: string;
+  searchString?: string;
   entitiesPluralName: string;
   Container: <T>({
     entities,
@@ -20,7 +20,7 @@ type EntitiesCategoryProps = {
 const EntitiesCategory = ({
   blockName,
   title,
-  query,
+  searchString,
   entitiesPluralName,
   Container,
 }: EntitiesCategoryProps) => {
@@ -33,7 +33,7 @@ const EntitiesCategory = ({
         blockName={blockName}
         Container={Container}
         entitiesPluralName={entitiesPluralName}
-        searchString={`${query}`}
+        searchString={searchString}
       />
     </div>
   );

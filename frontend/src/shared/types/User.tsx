@@ -1,6 +1,7 @@
 type User = {
   id: string;
   name: string;
+  email: string;
   profileViewCount: number;
   imagePath: string;
   school: School;

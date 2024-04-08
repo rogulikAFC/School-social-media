@@ -39,7 +39,7 @@ const FileArticlesCategoryPage = () => {
       <EntitiesCategory
         blockName="file-articles-category-page"
         title={`Категория "${categoryName}" школы ${schoolName}`}
-        query={searchString}
+        searchString={searchString}
         entitiesPluralName="file_articles"
         Container={EntitiesContainer}
       />

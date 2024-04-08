@@ -164,6 +164,7 @@ const SchoolPage = () => {
         blockName="main-page"
         Container={EntitiesContainer}
         entitiesPluralName="articles"
+        searchString={"schoolId=" + schoolId}
       />
     </>
   );

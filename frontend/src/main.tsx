@@ -14,6 +14,7 @@ import CreateSchoolPage from "./pages/CreateSchoolPage/CreateSchoolPage";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import UserContextProvider from "./contexts/UserContext";
 import CreateArticlePage from "./pages/CreateArticlePage/CreateArticlePage";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
 
 const router = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
       {
         path: "school/:schoolId/create_article",
         element: <CreateArticlePage />
+      },
+      {
+        path: "profile/:userId",
+        element: <ProfilePage />
       }
     ],
   },

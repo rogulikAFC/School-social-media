@@ -12,14 +12,14 @@ const SearchPage = () => {
       <EntitiesCategory
         blockName="search-results"
         title="Школы"
-        query={`query=${query}`}
+        searchString={`query=${query}`}
         entitiesPluralName="schools"
         Container={EntitiesContainer}
       />
       <EntitiesCategory
         blockName="search-results"
         title="Статьи"
-        query={`query=${query}`}
+        searchString={`query=${query}`}
         entitiesPluralName="articles"
         Container={EntitiesContainer}
       />

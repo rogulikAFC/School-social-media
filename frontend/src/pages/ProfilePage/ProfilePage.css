@@ -1,0 +1,65 @@
+.profile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.profile__header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  column-gap: 40px;
+  margin: 25px 3vw 0 3vw;
+  align-self: center;
+  border-radius: 13px;
+  background-color: white;
+  max-width: max-content;
+  padding: 32px 64px;
+}
+
+.profile__profile-image {
+  height: 250px;
+}
+
+.profile__info-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 250px;
+}
+
+.profile__title {
+  display: flex;
+  align-items: center;  
+  column-gap: 30px;
+  align-self: center;
+}
+
+.profile__other-info-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.profile__school-card {
+  align-self: center;
+  border: 1px black solid;
+}
+
+.profile__articles-category {
+  margin: 25px 3vw 0 3vw;
+  row-gap: 20px;
+}
+
+@media screen and (max-width: 480px) {
+}
+
+@media screen and (max-width: 769px) {
+}
+
+@media screen and (max-width: 1024px) {
+}
+
+@media screen and (max-width: 1280px) {
+}
