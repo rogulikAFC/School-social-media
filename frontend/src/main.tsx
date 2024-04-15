@@ -8,13 +8,13 @@ import ArticlePage from "./pages/ArticlePage/ArticlePage";
 import SearchPage from "./pages/SearchPage/SearchPage";
 import SchoolPage from "./pages/SchoolPage/SchoolPage";
 import ArticleCategoryPage from "./pages/ArticlesCategoryPage/ArticleCategoryPage";
-import FileArticleCard from "./FileArticleCard/FileArticleCard";
 import FileArticlesCategoryPage from "./pages/FileArticlesCategoryPage/FileArticlesCategoryPage";
 import CreateSchoolPage from "./pages/CreateSchoolPage/CreateSchoolPage";
 import SignUpPage from "./pages/SignUpPage/SignUpPage";
 import UserContextProvider from "./contexts/UserContext";
 import CreateArticlePage from "./pages/CreateArticlePage/CreateArticlePage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import ChangeUser from "./pages/ChangeUser/ChangeUser";
 
 const router = createBrowserRouter([
   {
@@ -60,6 +60,10 @@ const router = createBrowserRouter([
       {
         path: "profile/:userId",
         element: <ProfilePage />
+      },
+      {
+        path: "profile/:userId/change",
+        element: <ChangeUser />
       }
     ],
   },

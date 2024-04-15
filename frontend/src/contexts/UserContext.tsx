@@ -13,13 +13,15 @@ const cookies = new Cookies(null, { path: "/" });
 const getCredentials = async () => {
   const userId = cookies.get("userId");
 
-  console.log({ userId });
-
   const response = await fetch(config.SERVER_URL + "api/Users/" + userId);
 
   if (!response.ok) return null;
 
   const user: User = await response.json();
+
+  console.table({id: user.id, name: user.name, email: user.email});
+
+  console.log(user);
 
   return user;
 };
@@ -38,8 +40,6 @@ const signUp = async (userToSignUp: UserToSignUp): Promise<boolean> => {
   if (!response.ok) return false;
 
   const user: User = await response.json();
-
-  console.log(user);
 
   cookies.set("userId", user.id);
 
